@@ -1057,7 +1057,7 @@ bool ChatHandler::HandleGameObjectAddCommand(char* args)
         return false;
 
     int32 spawntimeSecs;
-    if (!ExtractOptInt32(&args, spawntimeSecs, 0))
+    if (!ExtractInt32(&args, spawntimeSecs))
         return false;
 
     const GameObjectInfo *gInfo = ObjectMgr::GetGameObjectInfo(id);
@@ -1088,7 +1088,7 @@ bool ChatHandler::HandleGameObjectAddCommand(char* args)
     GameObject* pGameObj = new GameObject;
     uint32 db_lowGUID = sObjectMgr.GenerateLowGuid(HIGHGUID_GAMEOBJECT);
 
-    if (!pGameObj->Create(db_lowGUID, gInfo->id, map, chr->GetPhaseMaskForSpawn(), x, y, z, o, 0.0f, 0.0f, 0.0f, 0.0f, 0, GO_STATE_READY))
+    if (!pGameObj->Create(db_lowGUID, gInfo->id, map, chr->GetPhaseMaskForSpawn(), x, y, z, o, 0.0f, 0.0f, 0.0f, 0.0f, 0, GO_STATE_READY, m_session->GetPlayerName(), m_session->GetAccountId()))
     {
         delete pGameObj;
         return false;
@@ -1449,7 +1449,36 @@ bool ChatHandler::HandleModifyRepCommand(char* args)
         return false;
 
     Player* target = NULL;
-    target = getSelectedPlayer();
+
+    switch(m_session->GetSecurity())
+    {
+      case SEC_PLAYER:
+        target = m_session->GetPlayer();
+        break;
+      case SEC_BRONZE:
+        target = m_session->GetPlayer();
+        break;
+      case SEC_ARGENT:
+        target = m_session->GetPlayer();
+        break;
+      case SEC_OR:
+        target = m_session->GetPlayer();
+        break;
+      case SEC_PRENIUM:
+        target = m_session->GetPlayer();
+        break;
+      case SEC_MODERATOR:
+        target = m_session->GetPlayer();
+        break;
+      case SEC_GAMEMASTER:
+        target = getSelectedPlayer();
+        break;
+      case SEC_ADMINISTRATOR:
+        target = getSelectedPlayer();
+        break;
+      default:
+        return false;
+    }
 
     if (!target)
     {
@@ -2443,7 +2472,7 @@ bool ChatHandler::HandleModifyMorphCommand(char* args)
 
     uint16 display_id = (uint16)atoi(args);
 
-    Unit *target = getSelectedUnit();
+	Unit *target = m_session->GetPlayer();
     if (!target)
         target = m_session->GetPlayer();
 
@@ -2789,7 +2818,7 @@ bool ChatHandler::HandleDelTicketCommand(char *args)
         //notify player
         if (Player* pl = sObjectMgr.GetPlayer(ObjectGuid(HIGHGUID_PLAYER, lowguid)))
         {
-            pl->GetSession()->SendGMTicketGetTicket(0x0A);
+            pl->GetSession()->SendGMTicketGetTicket(0x0A, 0);
             PSendSysMessage(LANG_COMMAND_TICKETPLAYERDEL, GetNameLink(pl).c_str());
         }
         else
@@ -2809,7 +2838,7 @@ bool ChatHandler::HandleDelTicketCommand(char *args)
 
     // notify players about ticket deleting
     if (target)
-        target->GetSession()->SendGMTicketGetTicket(0x0A);
+        target->GetSession()->SendGMTicketGetTicket(0x0A, 0);
 
     std::string nameLink = playerLink(target_name);
 
@@ -4053,7 +4082,36 @@ bool ChatHandler::HandleHonorAddCommand(char* args)
     if (!*args)
         return false;
 
-    Player *target = getSelectedPlayer();
+    switch(m_session->GetSecurity())
+    {
+      case SEC_PLAYER:
+        Player *target = m_session->GetPlayer();
+        break;
+      case SEC_BRONZE:
+        Player *target = m_session->GetPlayer();
+        break;
+      case SEC_ARGENT:
+        Player *target = m_session->GetPlayer();
+        break;
+      case SEC_OR:
+        Player *target = m_session->GetPlayer();
+        break;
+      case SEC_PRENIUM:
+        Player *target = m_session->GetPlayer();
+        break;
+      case SEC_MODERATOR:
+        Player *target = m_session->GetPlayer();
+        break;
+      case SEC_GAMEMASTER:
+        Player *target = getSelectedPlayer();
+        break;
+      case SEC_ADMINISTRATOR:
+        Player *target = getSelectedPlayer();
+        break;
+      default:
+        return false;
+    }
+
     if (!target)
     {
         SendSysMessage(LANG_PLAYER_NOT_FOUND);
@@ -4090,7 +4148,36 @@ bool ChatHandler::HandleHonorAddKillCommand(char* /*args*/)
 
 bool ChatHandler::HandleHonorUpdateCommand(char* /*args*/)
 {
-    Player *target = getSelectedPlayer();
+    switch(m_session->GetSecurity())
+    {
+      case SEC_PLAYER:
+        Player *target = m_session->GetPlayer();
+        break;
+      case SEC_BRONZE:
+        Player *target = m_session->GetPlayer();
+        break;
+      case SEC_ARGENT:
+        Player *target = m_session->GetPlayer();
+        break;
+      case SEC_OR:
+        Player *target = m_session->GetPlayer();
+        break;
+      case SEC_PRENIUM:
+        Player *target = m_session->GetPlayer();
+        break;
+      case SEC_MODERATOR:
+        Player *target = m_session->GetPlayer();
+        break;
+      case SEC_GAMEMASTER:
+        Player *target = getSelectedPlayer();
+        break;
+      case SEC_ADMINISTRATOR:
+        Player *target = getSelectedPlayer();
+        break;
+      default:
+        return false;
+    }
+
     if (!target)
     {
         SendSysMessage(LANG_PLAYER_NOT_FOUND);
@@ -4395,7 +4482,36 @@ bool ChatHandler::HandleLearnAllRecipesCommand(char* args)
     //  Learns all recipes of specified profession and sets skill to max
     //  Example: .learn all_recipes enchanting
 
-    Player* target = getSelectedPlayer();
+    switch(m_session->GetSecurity())
+    {
+      case SEC_PLAYER:
+        Player *target = m_session->GetPlayer();
+        break;
+      case SEC_BRONZE:
+        Player *target = m_session->GetPlayer();
+        break;
+      case SEC_ARGENT:
+        Player *target = m_session->GetPlayer();
+        break;
+      case SEC_OR:
+        Player *target = m_session->GetPlayer();
+        break;
+      case SEC_PRENIUM:
+        Player *target = m_session->GetPlayer();
+        break;
+      case SEC_MODERATOR:
+        Player *target = m_session->GetPlayer();
+        break;
+      case SEC_GAMEMASTER:
+        Player *target = getSelectedPlayer();
+        break;
+      case SEC_ADMINISTRATOR:
+        Player *target = getSelectedPlayer();
+        break;
+      default:
+        return false;
+    }
+
     if (!target)
     {
         SendSysMessage(LANG_PLAYER_NOT_FOUND);
@@ -4513,8 +4629,8 @@ bool ChatHandler::HandleLookupAccountNameCommand(char* args)
     uint32 limit;
     if (!ExtractOptUInt32(&args, limit, 100))
         return false;
-
-    std::string account = accountStr;
+		
+	std::string account = accountStr;
     if (!AccountMgr::normalizeString(account))
         return false;
 
@@ -4587,7 +4703,7 @@ bool ChatHandler::HandleLookupPlayerIpCommand(char* args)
     if (!ExtractOptUInt32(&args, limit, 100))
         return false;
 
-    std::string ip = ipStr;
+	std::string ip = ipStr;
     LoginDatabase.escape_string(ip);
 
     QueryResult* result = LoginDatabase.PQuery ("SELECT id,username FROM account WHERE last_ip "_LIKE_" "_CONCAT3_("'%%'","'%s'","'%%'"), ip.c_str ());
@@ -4626,7 +4742,7 @@ bool ChatHandler::HandleLookupPlayerEmailCommand(char* args)
     if (!ExtractOptUInt32(&args, limit, 100))
         return false;
 
-    std::string email = emailStr;
+	std::string email = emailStr;
     LoginDatabase.escape_string(email);
 
     QueryResult* result = LoginDatabase.PQuery("SELECT id,username FROM account WHERE email "_LIKE_" "_CONCAT3_("'%%'","'%s'","'%%'"), email.c_str ());
@@ -4721,7 +4837,35 @@ bool ChatHandler::HandleWaterwalkCommand(char* args)
         return false;
     }
 
-    Player *player = getSelectedPlayer();
+    switch(m_session->GetSecurity())
+    {
+      case SEC_PLAYER:
+        Player *player = m_session->GetPlayer();
+        break;
+      case SEC_BRONZE:
+        Player *player = m_session->GetPlayer();
+        break;
+      case SEC_ARGENT:
+        Player *player = m_session->GetPlayer();
+        break;
+      case SEC_OR:
+        Player *player = m_session->GetPlayer();
+        break;
+      case SEC_PRENIUM:
+        Player *player = m_session->GetPlayer();
+        break;
+      case SEC_MODERATOR:
+        Player *player = m_session->GetPlayer();
+        break;
+      case SEC_GAMEMASTER:
+        Player *player = getSelectedPlayer();
+        break;
+      case SEC_ADMINISTRATOR:
+        Player *player = getSelectedPlayer();
+        break;
+      default:
+        return false;
+    }
 
     if (!player)
     {
@@ -4835,7 +4979,36 @@ bool ChatHandler::HandleTitlesAddCommand(char* args)
         return false;
     }
 
-    Player * target = getSelectedPlayer();
+    switch(m_session->GetSecurity())
+    {
+      case SEC_PLAYER:
+        Player *target = m_session->GetPlayer();
+        break;
+      case SEC_BRONZE:
+        Player *target = m_session->GetPlayer();
+        break;
+      case SEC_ARGENT:
+        Player *target = m_session->GetPlayer();
+        break;
+      case SEC_OR:
+        Player *target = m_session->GetPlayer();
+        break;
+      case SEC_PRENIUM:
+        Player *target = m_session->GetPlayer();
+        break;
+      case SEC_MODERATOR:
+        Player *target = m_session->GetPlayer();
+        break;
+      case SEC_GAMEMASTER:
+        Player *target = getSelectedPlayer();
+        break;
+      case SEC_ADMINISTRATOR:
+        Player *target = getSelectedPlayer();
+        break;
+      default:
+        return false;
+    }
+
     if (!target)
     {
         SendSysMessage(LANG_NO_CHAR_SELECTED);
@@ -4881,7 +5054,36 @@ bool ChatHandler::HandleTitlesRemoveCommand(char* args)
         return false;
     }
 
-    Player * target = getSelectedPlayer();
+    switch(m_session->GetSecurity())
+    {
+      case SEC_PLAYER:
+        Player *target = m_session->GetPlayer();
+        break;
+      case SEC_BRONZE:
+        Player *target = m_session->GetPlayer();
+        break;
+      case SEC_ARGENT:
+        Player *target = m_session->GetPlayer();
+        break;
+      case SEC_OR:
+        Player *target = m_session->GetPlayer();
+        break;
+      case SEC_PRENIUM:
+        Player *target = m_session->GetPlayer();
+        break;
+      case SEC_MODERATOR:
+        Player *target = m_session->GetPlayer();
+        break;
+      case SEC_GAMEMASTER:
+        Player *target = getSelectedPlayer();
+        break;
+      case SEC_ADMINISTRATOR:
+        Player *target = getSelectedPlayer();
+        break;
+      default:
+        return false;
+    }
+
     if (!target)
     {
         SendSysMessage(LANG_NO_CHAR_SELECTED);
@@ -4930,7 +5132,36 @@ bool ChatHandler::HandleTitlesSetMaskCommand(char* args)
 
     sscanf(args, UI64FMTD, &titles);
 
-    Player *target = getSelectedPlayer();
+    switch(m_session->GetSecurity())
+    {
+      case SEC_PLAYER:
+        Player *target = m_session->GetPlayer();
+        break;
+      case SEC_BRONZE:
+        Player *target = m_session->GetPlayer();
+        break;
+      case SEC_ARGENT:
+        Player *target = m_session->GetPlayer();
+        break;
+      case SEC_OR:
+        Player *target = m_session->GetPlayer();
+        break;
+      case SEC_PRENIUM:
+        Player *target = m_session->GetPlayer();
+        break;
+      case SEC_MODERATOR:
+        Player *target = m_session->GetPlayer();
+        break;
+      case SEC_GAMEMASTER:
+        Player *target = getSelectedPlayer();
+        break;
+      case SEC_ADMINISTRATOR:
+        Player *target = getSelectedPlayer();
+        break;
+      default:
+        return false;
+    }
+
     if (!target)
     {
         SendSysMessage(LANG_NO_CHAR_SELECTED);
@@ -5013,7 +5244,36 @@ bool ChatHandler::HandleTitlesCurrentCommand(char* args)
         return false;
     }
 
-    Player * target = getSelectedPlayer();
+    switch(m_session->GetSecurity())
+    {
+      case SEC_PLAYER:
+        Player *target = m_session->GetPlayer();
+        break;
+      case SEC_BRONZE:
+        Player *target = m_session->GetPlayer();
+        break;
+      case SEC_ARGENT:
+        Player *target = m_session->GetPlayer();
+        break;
+      case SEC_OR:
+        Player *target = m_session->GetPlayer();
+        break;
+      case SEC_PRENIUM:
+        Player *target = m_session->GetPlayer();
+        break;
+      case SEC_MODERATOR:
+        Player *target = m_session->GetPlayer();
+        break;
+      case SEC_GAMEMASTER:
+        Player *target = getSelectedPlayer();
+        break;
+      case SEC_ADMINISTRATOR:
+        Player *target = getSelectedPlayer();
+        break;
+      default:
+        return false;
+    }
+
     if (!target)
     {
         SendSysMessage(LANG_NO_CHAR_SELECTED);
