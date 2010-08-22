@@ -173,11 +173,15 @@ enum TimeConstants
 
 enum AccountTypes
 {
-    SEC_PLAYER         = 0,
-    SEC_MODERATOR      = 1,
-    SEC_GAMEMASTER     = 2,
-    SEC_ADMINISTRATOR  = 3,
-    SEC_CONSOLE        = 4                                  // must be always last in list, accounts must have less security level always also
+    SEC_PLAYER         = 0, // Compte JOUEUR
+    SEC_BRONZE         = 1, // Compte BRONZE
+    SEC_ARGENT         = 2, // Compte ARGENT
+    SEC_OR             = 3, // Compte OR
+    SEC_PRENIUM        = 4, // Compte PRENIUM
+    SEC_MODERATOR      = 5, // Compte CATACLYSM
+    SEC_GAMEMASTER     = 6, // Compte MAITRE DE JEU
+    SEC_ADMINISTRATOR  = 7, // Compte ADMINISTRATEUR
+    SEC_CONSOLE        = 8  // Compte CONSOLE
 };
 
 // Used in mangosd/realmd
