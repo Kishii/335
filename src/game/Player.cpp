@@ -17318,7 +17318,12 @@ void Player::_SaveStats()
     std::ostringstream ss;
     ss << "INSERT INTO character_stats (guid, maxhealth, maxpower1, maxpower2, maxpower3, maxpower4, maxpower5, maxpower6, maxpower7, "
         "strength, agility, stamina, intellect, spirit, armor, resHoly, resFire, resNature, resFrost, resShadow, resArcane, "
-        "blockPct, dodgePct, parryPct, critPct, rangedCritPct, spellCritPct, attackPower, rangedAttackPower, spellPower) VALUES ("
+        "blockPct, dodgePct, parryPct, critPct, rangedCritPct, spellCritPct, attackPower, rangedAttackPower, spellPower, "  
+        "gm_apmelee, gm_ranged, gm_blockrating, gm_defrating, gm_dodgerating, gm_parryrating, gm_resilience, gm_manaregen, "
+        "gm_melee_hitrating, gm_melee_critrating, gm_melee_hasterating, gm_melee_mainmindmg, gm_melee_mainmaxdmg, "
+        "gm_melee_offmindmg, gm_melee_offmaxdmg, gm_melee_maintime, gm_melee_offtime, gm_ranged_critrating, gm_ranged_hasterating, "
+        "gm_ranged_hitrating, gm_ranged_mindmg, gm_ranged_maxdmg, gm_ranged_attacktime, "
+        "gm_spell_hitrating, gm_spell_critrating, gm_spell_hasterating, gm_spell_bonusdmg, gm_spell_bonusheal, gm_spell_critproc) VALUES ("
         << GetGUIDLow() << ", "
         << GetMaxHealth() << ", ";
     for(int i = 0; i < MAX_POWERS; ++i)
@@ -17336,7 +17341,36 @@ void Player::_SaveStats()
        << GetFloatValue(PLAYER_SPELL_CRIT_PERCENTAGE1) << ", "
        << GetUInt32Value(UNIT_FIELD_ATTACK_POWER) << ", "
        << GetUInt32Value(UNIT_FIELD_RANGED_ATTACK_POWER) << ", "
-       << GetBaseSpellPowerBonus() << ")";
+       << GetBaseSpellPowerBonus() << ", "
+       << (GetUInt32Value(GMISLAND_AP_MELEE_1)+GetUInt32Value(GMISLAND_AP_MELEE_2)) << ", "
+       << (GetUInt32Value(GMISLAND_AP_RANGED_1)+GetUInt32Value(GMISLAND_AP_RANGED_2)) << ", "
+       << GetUInt32Value(GMISLAND_BLOCKRATING) << ", "
+       << GetUInt32Value(GMISLAND_DEFRATING) << ", "
+       << GetUInt32Value(GMISLAND_DODGERATING) << ", "
+       << GetUInt32Value(GMISLAND_PARRYRATING) << ", "
+       << GetUInt32Value(GMISLAND_RESILIENCE) << ", "
+       << GetFloatValue(GMISLAND_MANAREGEN) << ", "
+       << GetUInt32Value(GMISLAND_MELEE_HITRATING) << ", "
+       << GetUInt32Value(GMISLAND_MELEE_CRITRATING) << ", "
+       << GetUInt32Value(GMISLAND_MELEE_HASTERATING) << ", "
+       << GetFloatValue(GMISLAND_MELEE_MAINMINDMG) << ", "
+       << GetFloatValue(GMISLAND_MELEE_MAINMAXDMG) << ", "
+       << GetFloatValue(GMISLAND_MELEE_OFFMINDMG) << ", "
+       << GetFloatValue(GMISLAND_MELEE_OFFMAXDMG) << ", "
+       << GetFloatValue(GMISLAND_MELLE_MAINTIME) << ", "
+       << GetFloatValue(GMISLAND_MELLE_OFFTIME) << ", "
+       << GetUInt32Value(GMISLAND_RANGED_CRITRATING) << ", "
+       << GetUInt32Value(GMISLAND_RANGED_HASTERATING) << ", "
+       << GetUInt32Value(GMISLAND_RANGED_HITRATING) << ", "
+       << GetFloatValue(GMISLAND_RANGED_MINDMG) << ", "
+       << GetFloatValue(GMISLAND_RANGED_MAXDMG) << ", "
+       << GetFloatValue(GMISLAND_RANGED_ATTACKTIME) << ", "
+       << GetUInt32Value(GMISLAND_SPELL_HITRATING) << ", "
+       << GetUInt32Value(GMISLAND_SPELL_CRITRATING) << ", "
+       << GetUInt32Value(GMISLAND_SPELL_HASTERATING) << ", "
+       << GetUInt32Value(GMISLAND_SPELL_BONUSDMG) << ", "
+       << GetUInt32Value(GMISLAND_SPELL_BONUSHEAL) << ", "
+       << GetFloatValue(GMISLAND_SPELL_CRITPROC) << ")";
     CharacterDatabase.Execute( ss.str().c_str() );
 }
 

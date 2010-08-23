@@ -1298,37 +1298,26 @@ bool ChatHandler::HandleMaxSkillCommand(char* /*args*/)
 
 bool ChatHandler::HandleSetSkillCommand(char* args)
 {
+    Player* target = NULL;
     switch(m_session->GetSecurity())
     {
       case SEC_PLAYER:
-		Player * target = m_session->GetPlayer();
-        break;
       case SEC_BRONZE:
-		Player * target = m_session->GetPlayer();
-        break;
       case SEC_ARGENT:
-		Player * target = m_session->GetPlayer();
-        break;
       case SEC_OR:
-		Player * target = m_session->GetPlayer();
-        break;
       case SEC_PRENIUM:
-		Player * target = m_session->GetPlayer();
-        break;
       case SEC_MODERATOR:
-		Player * target = m_session->GetPlayer();
+        target = m_session->GetPlayer();
         break;
       case SEC_GAMEMASTER:
-        Player * target = getSelectedPlayer();
-        break;
       case SEC_ADMINISTRATOR:
-        Player * target = getSelectedPlayer();
+        target = getSelectedPlayer();
         break;
       default:
         return false;
     }
     
-    if (!target)
+    if (target == NULL)
     {
         SendSysMessage(LANG_NO_CHAR_SELECTED);
         SetSentErrorMessage(true);
@@ -1399,37 +1388,26 @@ bool ChatHandler::HandleUnLearnCommand(char* args)
     if (!allRanks && *args)                                 // can be fail also at syntax error
         return false;
 
+    Player* target = NULL;
     switch(m_session->GetSecurity())
     {
       case SEC_PLAYER:
-		Player * target = m_session->GetPlayer();
-        break;
       case SEC_BRONZE:
-		Player * target = m_session->GetPlayer();
-        break;
       case SEC_ARGENT:
-		Player * target = m_session->GetPlayer();
-        break;
       case SEC_OR:
-		Player * target = m_session->GetPlayer();
-        break;
       case SEC_PRENIUM:
-		Player * target = m_session->GetPlayer();
-        break;
       case SEC_MODERATOR:
-		Player * target = m_session->GetPlayer();
+        target = m_session->GetPlayer();
         break;
       case SEC_GAMEMASTER:
-        Player * target = getSelectedPlayer();
-        break;
       case SEC_ADMINISTRATOR:
-        Player * target = getSelectedPlayer();
+        target = getSelectedPlayer();
         break;
       default:
         return false;
     }
 
-    if(!target)
+    if(target == NULL)
     {
         SendSysMessage(LANG_NO_CHAR_SELECTED);
         SetSentErrorMessage(true);
@@ -1452,37 +1430,26 @@ bool ChatHandler::HandleUnLearnCommand(char* args)
 
 bool ChatHandler::HandleCooldownCommand(char* args)
 {
+    Player* target = NULL;
     switch(m_session->GetSecurity())
     {
       case SEC_PLAYER:
-		Player * target = m_session->GetPlayer();
-        break;
       case SEC_BRONZE:
-		Player * target = m_session->GetPlayer();
-        break;
       case SEC_ARGENT:
-		Player * target = m_session->GetPlayer();
-        break;
       case SEC_OR:
-		Player * target = m_session->GetPlayer();
-        break;
       case SEC_PRENIUM:
-		Player * target = m_session->GetPlayer();
-        break;
       case SEC_MODERATOR:
-		Player * target = m_session->GetPlayer();
+        target = m_session->GetPlayer();
         break;
       case SEC_GAMEMASTER:
-        Player * target = getSelectedPlayer();
-        break;
       case SEC_ADMINISTRATOR:
-        Player * target = getSelectedPlayer();
+        target = getSelectedPlayer();
         break;
       default:
         return false;
     }
 
-    if(!target)
+    if(target == NULL)
     {
         SendSysMessage(LANG_PLAYER_NOT_FOUND);
         SetSentErrorMessage(true);
@@ -2386,37 +2353,26 @@ bool ChatHandler::HandleLearnAllDefaultCommand(char* args)
 
 bool ChatHandler::HandleLearnCommand(char* args)
 {
+    Player* targetPlayer = NULL;
     switch(m_session->GetSecurity())
     {
       case SEC_PLAYER:
-		Player * targetPlayer = m_session->GetPlayer();
-        break;
       case SEC_BRONZE:
-		Player * targetPlayer = m_session->GetPlayer();
-        break;
       case SEC_ARGENT:
-		Player * targetPlayer = m_session->GetPlayer();
-        break;
       case SEC_OR:
-		Player * targetPlayer = m_session->GetPlayer();
-        break;
       case SEC_PRENIUM:
-		Player * targetPlayer = m_session->GetPlayer();
-        break;
       case SEC_MODERATOR:
-		Player * targetPlayer = m_session->GetPlayer();
+        targetPlayer = m_session->GetPlayer();
         break;
       case SEC_GAMEMASTER:
-        Player * targetPlayer = getSelectedPlayer();
-        break;
       case SEC_ADMINISTRATOR:
-        Player * targetPlayer = getSelectedPlayer();
+        targetPlayer = getSelectedPlayer();
         break;
       default:
         return false;
     }
 
-    if(!targetPlayer)
+    if(targetPlayer == NULL)
     {
         SendSysMessage(LANG_PLAYER_NOT_FOUND);
         SetSentErrorMessage(true);
@@ -2483,47 +2439,45 @@ bool ChatHandler::HandleAddItemCommand(char* args)
         itemId = result->Fetch()->GetUInt16();
         delete result;
     }
-	
+
     int32 count;
     if (!ExtractOptInt32(&args, count, 1))
         return false;
 
+    Player* pl = m_session->GetPlayer();
+    Player* plTarget = NULL;
     switch(m_session->GetSecurity())
     {
       case SEC_PLAYER:
-        Player* plTarget = m_session->GetPlayer();
-        break;
       case SEC_BRONZE:
-        Player* plTarget = m_session->GetPlayer();
-        break;
       case SEC_ARGENT:
-        Player* plTarget = m_session->GetPlayer();
-        break;
       case SEC_OR:
-        Player* plTarget = m_session->GetPlayer();
-        break;
       case SEC_PRENIUM:
-        Player* plTarget = m_session->GetPlayer();
-        break;
       case SEC_MODERATOR:
-        Player* plTarget = m_session->GetPlayer();
+        plTarget = m_session->GetPlayer();
+		
+        // Restriction des items
+        QueryResult *disabled;
+        disabled = WorldDatabase.PQuery("SELECT active FROM item_disabled WHERE id = '%u'", itemId);
+        if (disabled)
+        {
+	        PSendSysMessage(LANG_ITEM_DISABLED);
+            SetSentErrorMessage(true);
+		    return false;
+        }
         break;
       case SEC_GAMEMASTER:
-        Player* plTarget = getSelectedPlayer();
-        if(!plTarget)
-		    plTarget = m_session->GetPlayer();
-        break;
       case SEC_ADMINISTRATOR:
-        Player* plTarget = getSelectedPlayer();
+        plTarget = getSelectedPlayer();
         if(!plTarget)
-		    plTarget = m_session->GetPlayer();
+            plTarget = pl;
         break;
       default:
         return false;
     }
 
     DETAIL_LOG(GetMangosString(LANG_ADDITEM), itemId, count);
-	
+
     ItemPrototype const *pProto = ObjectMgr::GetItemPrototype(itemId);
     if(!pProto)
     {
@@ -2531,17 +2485,7 @@ bool ChatHandler::HandleAddItemCommand(char* args)
         SetSentErrorMessage(true);
         return false;
     }
-	
-    // Restriction des items
-    QueryResult *disabled;
-    disabled = WorldDatabase.PQuery("SELECT active FROM item_disabled WHERE id = '%u'", itemId);
-    if (disabled)
-    {
-	    PSendSysMessage(LANG_ITEM_DISABLED);
-        SetSentErrorMessage(true);
-        return false;
-    }
-	
+
     //Subtract
     if (count < 0)
     {
@@ -2601,35 +2545,23 @@ bool ChatHandler::HandleAddItemSetCommand(char* args)
         return false;
     }
 
+    Player* pl = m_session->GetPlayer();
+    Player* plTarget = NULL;
     switch(m_session->GetSecurity())
     {
       case SEC_PLAYER:
-        Player* plTarget = m_session->GetPlayer();
-        break;
       case SEC_BRONZE:
-        Player* plTarget = m_session->GetPlayer();
-        break;
       case SEC_ARGENT:
-        Player* plTarget = m_session->GetPlayer();
-        break;
       case SEC_OR:
-        Player* plTarget = m_session->GetPlayer();
-        break;
       case SEC_PRENIUM:
-        Player* plTarget = m_session->GetPlayer();
-        break;
       case SEC_MODERATOR:
-        Player* plTarget = m_session->GetPlayer();
+        plTarget = m_session->GetPlayer();
         break;
       case SEC_GAMEMASTER:
-        Player* plTarget = getSelectedPlayer();
-        if(!plTarget)
-		    plTarget = m_session->GetPlayer();
-        break;
       case SEC_ADMINISTRATOR:
-        Player* plTarget = getSelectedPlayer();
+        plTarget = getSelectedPlayer();
         if(!plTarget)
-		    plTarget = m_session->GetPlayer();
+            plTarget = pl;
         break;
       default:
         return false;
@@ -3945,37 +3877,26 @@ bool ChatHandler::HandleModifyArenaCommand(char* args)
     if (!*args)
         return false;
 
+    Player* target = NULL;
     switch(m_session->GetSecurity())
     {
       case SEC_PLAYER:
-        Player *target = m_session->GetPlayer();
-        break;
       case SEC_BRONZE:
-        Player *target = m_session->GetPlayer();
-        break;
       case SEC_ARGENT:
-        Player *target = m_session->GetPlayer();
-        break;
       case SEC_OR:
-        Player *target = m_session->GetPlayer();
-        break;
       case SEC_PRENIUM:
-        Player *target = m_session->GetPlayer();
-        break;
       case SEC_MODERATOR:
-        Player *target = m_session->GetPlayer();
+        target = m_session->GetPlayer();
         break;
       case SEC_GAMEMASTER:
-        Player *target = getSelectedPlayer();
-        break;
       case SEC_ADMINISTRATOR:
-        Player *target = getSelectedPlayer();
+        target = getSelectedPlayer();
         break;
       default:
         return false;
     }
 
-    if (!target)
+    if (target == NULL)
     {
         SendSysMessage(LANG_PLAYER_NOT_FOUND);
         SetSentErrorMessage(true);
@@ -4377,31 +4298,20 @@ bool ChatHandler::HandleExploreCheatCommand(char* args)
 
     int flag = atoi(args);
 
+    Player* chr = NULL;
     switch(m_session->GetSecurity())
     {
       case SEC_PLAYER:
-        Player *chr = m_session->GetPlayer();
-        break;
       case SEC_BRONZE:
-        Player *chr = m_session->GetPlayer();
-        break;
       case SEC_ARGENT:
-        Player *chr = m_session->GetPlayer();
-        break;
       case SEC_OR:
-        Player *chr = m_session->GetPlayer();
-        break;
       case SEC_PRENIUM:
-        Player *chr = m_session->GetPlayer();
-        break;
       case SEC_MODERATOR:
-        Player *chr = m_session->GetPlayer();
+        chr = m_session->GetPlayer();
         break;
       case SEC_GAMEMASTER:
-        Player *chr = getSelectedPlayer();
-        break;
       case SEC_ADMINISTRATOR:
-        Player *chr = getSelectedPlayer();
+        chr = getSelectedPlayer();
         break;
       default:
         return false;
@@ -4581,31 +4491,20 @@ bool ChatHandler::HandleShowAreaCommand(char* args)
     if (!*args)
         return false;
 
+    Player* chr = NULL;
     switch(m_session->GetSecurity())
     {
       case SEC_PLAYER:
-        Player *chr = m_session->GetPlayer();
-        break;
       case SEC_BRONZE:
-        Player *chr = m_session->GetPlayer();
-        break;
       case SEC_ARGENT:
-        Player *chr = m_session->GetPlayer();
-        break;
       case SEC_OR:
-        Player *chr = m_session->GetPlayer();
-        break;
       case SEC_PRENIUM:
-        Player *chr = m_session->GetPlayer();
-        break;
       case SEC_MODERATOR:
-        Player *chr = m_session->GetPlayer();
+        chr = m_session->GetPlayer();
         break;
       case SEC_GAMEMASTER:
-        Player *chr = getSelectedPlayer();
-        break;
       case SEC_ADMINISTRATOR:
-        Player *chr = getSelectedPlayer();
+        chr = getSelectedPlayer();
         break;
       default:
         return false;
@@ -5949,35 +5848,22 @@ bool ChatHandler::HandleGMFlyCommand(char* args)
         return false;
     }
 
+    Player* target = NULL;
     switch(m_session->GetSecurity())
     {
       case SEC_PLAYER:
-        Player *target = m_session->GetPlayer();
-        break;
       case SEC_BRONZE:
-        Player *target = m_session->GetPlayer();
-        break;
       case SEC_ARGENT:
-        Player *target = m_session->GetPlayer();
-        break;
       case SEC_OR:
-        Player *target = m_session->GetPlayer();
-        break;
       case SEC_PRENIUM:
-        Player *target = m_session->GetPlayer();
-        break;
       case SEC_MODERATOR:
-        Player *target = m_session->GetPlayer();
+        target = m_session->GetPlayer();
         break;
       case SEC_GAMEMASTER:
-        Player *target = getSelectedPlayer();
-		if (!target)
-			target = m_session->GetPlayer();
-        break;
       case SEC_ADMINISTRATOR:
-        Player *target = getSelectedPlayer();
-		if (!target)
-			target = m_session->GetPlayer();
+        target = getSelectedPlayer();
+        if(!target)
+            target = m_session->GetPlayer();
         break;
       default:
         return false;
@@ -6936,37 +6822,26 @@ bool ChatHandler::HandleModifyGenderCommand(char *args)
     if (!*args)
         return false;
 
+    Player* player = NULL;
     switch(m_session->GetSecurity())
     {
       case SEC_PLAYER:
-        Player *player = m_session->GetPlayer();
-        break;
       case SEC_BRONZE:
-        Player *player = m_session->GetPlayer();
-        break;
       case SEC_ARGENT:
-        Player *player = m_session->GetPlayer();
-        break;
       case SEC_OR:
-        Player *player = m_session->GetPlayer();
-        break;
       case SEC_PRENIUM:
-        Player *player = m_session->GetPlayer();
-        break;
       case SEC_MODERATOR:
-        Player *player = m_session->GetPlayer();
+        player = m_session->GetPlayer();
         break;
       case SEC_GAMEMASTER:
-        Player *player = getSelectedPlayer();
-        break;
       case SEC_ADMINISTRATOR:
-        Player *player = getSelectedPlayer();
+        player = getSelectedPlayer();
         break;
       default:
         return false;
     }
 
-    if (!player)
+    if (player == NULL)
     {
         PSendSysMessage(LANG_PLAYER_NOT_FOUND);
         SetSentErrorMessage(true);
