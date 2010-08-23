@@ -1331,6 +1331,8 @@ void GameObject::Use(Unit* user)
                 BattleGround *bg = player->GetBattleGround();
                 if (!bg)
                     return;
+                if (player->GetVehicle())
+                    return;
                 // BG flag click
                 // AB:
                 // 15001
@@ -1366,6 +1368,8 @@ void GameObject::Use(Unit* user)
                 // in battleground check
                 BattleGround *bg = player->GetBattleGround();
                 if (!bg)
+                    return;
+                if (player->GetVehicle())
                     return;
                 // BG flag dropped
                 // WS:
@@ -1584,6 +1588,18 @@ float GameObject::GetObjectBoundingRadius() const
         return fabs(dispEntry->unknown12) * GetObjectScale();
 
     return DEFAULT_WORLD_OBJECT_SIZE;
+}
+
+void GameObject::DealSiegeDamage(uint32 damage)
+{
+    m_actualHealth -= damage;
+
+    // TODO : there are a lot of thinghts to do here
+    if(m_actualHealth < 0)
+    {
+        m_actualHealth = GetGOInfo()->destructibleBuilding.intactNumHits;
+        SetLootState(GO_JUST_DEACTIVATED);
+    }
 }
 
 bool GameObject::IsInSkillupList(Player* player) const
