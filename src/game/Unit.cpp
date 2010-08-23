@@ -10390,7 +10390,7 @@ void Unit::KnockBackPlayerWithAngle(float angle, float horizontalSpeed, float ve
     if(GetTypeId()==TYPEID_PLAYER)
     {
         WorldPacket data(SMSG_MOVE_KNOCK_BACK, 8+4+4+4+4+4);
-        data.append(GetPackGUID());
+        data << GetPackGUID();
         data << uint32(0);                                  // Sequence
         data << float(vcos);                                // x direction
         data << float(vsin);                                // y direction

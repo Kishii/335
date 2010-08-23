@@ -102,7 +102,8 @@ void BattleGroundDS::AddPlayer(Player *plr)
 
     m_PlayerScores[plr->GetGUID()] = sc;
 
-    UpdateArenaWorldState();
+    UpdateWorldState(0xe11, GetAlivePlayersCountByTeam(ALLIANCE));
+    UpdateWorldState(0xe10, GetAlivePlayersCountByTeam(HORDE));
 }
 
 void BattleGroundDS::RemovePlayer(Player * /*plr*/, uint64 /*guid*/)
@@ -110,7 +111,9 @@ void BattleGroundDS::RemovePlayer(Player * /*plr*/, uint64 /*guid*/)
     if (GetStatus() == STATUS_WAIT_LEAVE)
         return;
 
-    UpdateArenaWorldState();
+    UpdateWorldState(0xe11, GetAlivePlayersCountByTeam(ALLIANCE));
+    UpdateWorldState(0xe10, GetAlivePlayersCountByTeam(HORDE));
+
     CheckArenaWinConditions();
 }
 
@@ -127,7 +130,9 @@ void BattleGroundDS::HandleKillPlayer(Player* player, Player* killer)
 
     BattleGround::HandleKillPlayer(player,killer);
 
-    UpdateArenaWorldState();
+    UpdateWorldState(0xe11, GetAlivePlayersCountByTeam(ALLIANCE));
+    UpdateWorldState(0xe10, GetAlivePlayersCountByTeam(HORDE));
+
     CheckArenaWinConditions();
 }
 
@@ -157,7 +162,9 @@ bool BattleGroundDS::HandlePlayerUnderMap(Player *player)
 void BattleGroundDS::FillInitialWorldStates(WorldPacket &data)
 {
     data << uint32(3610) << uint32(1);           // 9
-    UpdateArenaWorldState();
+
+    UpdateWorldState(0xe11, GetAlivePlayersCountByTeam(ALLIANCE));
+    UpdateWorldState(0xe10, GetAlivePlayersCountByTeam(HORDE));
 }
 
 void BattleGroundDS::Reset()

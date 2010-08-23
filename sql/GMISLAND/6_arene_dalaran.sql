@@ -1,4 +1,4 @@
-/*#Dalaran Arena
+-- Dalaran Arena
 INSERT INTO `gameobject` VALUES
 -- BUFFS
 ('200060', '184663', '617', '1', '1', '1291.7', '813.424', '7.11472', '4.64562', '0', '0', '0.730314', '-0.683111', '120', '100', '1'),
@@ -20,4 +20,4 @@ INSERT INTO `battleground_events` VALUES
 ('617', '254', '0', 'PORTES');
  
 -- PORTES
-UPDATE gameobject_template SET faction = '114', flags = '32', size = '1.5' WHERE entry IN (192642, 192643);*/
+UPDATE gameobject_template SET faction = '114', flags = '32', size = '1.5' WHERE entry IN (192642, 192643);
