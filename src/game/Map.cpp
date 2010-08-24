@@ -662,12 +662,10 @@ void Map::Remove(Player *player, bool remove)
     if(p.x_coord >= TOTAL_NUMBER_OF_CELLS_PER_MAP || p.y_coord >= TOTAL_NUMBER_OF_CELLS_PER_MAP)
     {
         // invalid coordinates
-        player->ResetMap();
-
         if( remove )
             DeleteFromWorld(player);
-
-        return;
+        else player->ResetMap();
+            return;
     }
 
     Cell cell(p);
@@ -680,16 +678,16 @@ void Map::Remove(Player *player, bool remove)
 
     DEBUG_FILTER_LOG(LOG_FILTER_PLAYER_MOVES, "Remove player %s from grid[%u,%u]", player->GetName(), cell.GridX(), cell.GridY());
     NGridType *grid = getNGrid(cell.GridX(), cell.GridY());
-    ASSERT(grid != NULL);
+    //ASSERT(grid != NULL); -- crashfix 7/13/2010
 
     RemoveFromGrid(player,grid,cell);
 
     SendRemoveTransports(player);
     UpdateObjectVisibility(player,cell,p);
 
-    player->ResetMap();
     if( remove )
         DeleteFromWorld(player);
+    else player->ResetMap();
 }
 
 template<class T>
@@ -1438,7 +1436,8 @@ void Map::AddObjectToRemoveList(WorldObject *obj)
 {
     ASSERT(obj->GetMapId()==GetId() && obj->GetInstanceId()==GetInstanceId());
 
-    obj->CleanupsBeforeDelete();                            // remove or simplify at least cross referenced links
+    // need clean references at end of update cycle, NOT during it! called at Map::Remove
+    //obj->CleanupsBeforeDelete();                            // remove or simplify at least cross referenced links
 
     i_objectsToRemove.insert(obj);
     //DEBUG_LOG("Object (GUID: %u TypeId: %u ) added to removing list.",obj->GetGUIDLow(),obj->GetTypeId());
@@ -1761,7 +1760,7 @@ bool InstanceMap::Add(Player *player)
                                 sLog.outError("GroupBind save players: %d, group count: %d", groupBind->save->GetPlayerCount(), groupBind->save->GetGroupCount());
                             else
                                 sLog.outError("GroupBind save NULL");
-                            ASSERT(false);
+                            //ASSERT(false);
                         }
                         // if the group/leader is permanently bound to the instance
                         // players also become permanently bound when they enter

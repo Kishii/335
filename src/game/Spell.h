@@ -164,7 +164,7 @@ class SpellCastTargets
 
         float m_srcX, m_srcY, m_srcZ, m_srcO;
         float m_destX, m_destY, m_destZ;
-		float m_elevation, m_speed
+        float m_elevation, m_speed;
         std::string m_strTarget;
 
         uint32 m_targetMask;

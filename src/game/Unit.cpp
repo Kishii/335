@@ -1855,7 +1855,20 @@ uint32 Unit::CalcArmorReducedDamage(Unit* pVictim, const uint32 damage)
 
     // Apply Player CR_ARMOR_PENETRATION rating and percent talents
     if (GetTypeId()==TYPEID_PLAYER)
-        armor *= 1.0f - ((Player*)this)->GetArmorPenetrationPct() / 100.0f;
+    {
+        float maxArmorPen = 0.0f;
+        uint32 targetLevel = pVictim->getLevel();
+
+        if (getLevel() < 60)
+            maxArmorPen = 400+85*targetLevel;
+        else
+            maxArmorPen = 400+85*targetLevel+4.5f*85*(targetLevel-59);
+
+        maxArmorPen = std::min((armor+maxArmorPen)/3, armor);
+        float armorPen = maxArmorPen * ((Player*)this)->GetArmorPenetrationPct() / 100.0f;
+
+        armor -= armorPen;
+    }
 
     if (armor < 0.0f)
         armor = 0.0f;
@@ -3389,9 +3402,11 @@ void Unit::_UpdateSpells( uint32 time )
                     {
                         if (!aura->GetAuraDuration())
                         {
+                            bool last = aura->IsLastAuraOnHolder();
                             RemoveSingleAuraFromSpellAuraHolder(holder, aura->GetEffIndex(), AURA_REMOVE_BY_EXPIRE);
                             removedAura = true;
-                            break;
+                            if (last)
+                                break;
                         }
                     }
                 }
@@ -4805,6 +4820,10 @@ Aura* Unit::GetAura(AuraType type, uint32 family, uint64 familyFlag, uint32 fami
     for(AuraList::const_iterator i = auras.begin();i != auras.end(); ++i)
     {
         SpellEntry const *spell = (*i)->GetSpellProto();
+
+        if (!spell)
+            continue;
+
         if (spell->SpellFamilyName == family && (spell->SpellFamilyFlags & familyFlag || spell->SpellFamilyFlags2 & familyFlag2))
         {
             if (casterGUID && (*i)->GetCasterGUID()!=casterGUID)
@@ -5794,8 +5813,9 @@ Pet* Unit::GetPet() const
 {
     if(uint64 pet_guid = GetPetGUID())
     {
-        if(Pet* pet = GetMap()->GetPet(pet_guid))
-            return pet;
+        if(IsInWorld())
+            if(Pet* pet = GetMap()->GetPet(pet_guid))
+                return pet;
 
         sLog.outError("Unit::GetPet: Pet %u not exist.",GUID_LOPART(pet_guid));
         const_cast<Unit*>(this)->SetPet(0);
@@ -8498,7 +8518,7 @@ bool Unit::SelectHostileTarget()
     //next-victim-selection algorithm and evade mode are called
     //threat list sorting etc.
 
-    ASSERT(GetTypeId()== TYPEID_UNIT);
+    //ASSERT(GetTypeId()== TYPEID_UNIT); -- crash fix 7/13/2010
 
     if (!this->isAlive())
         return false;

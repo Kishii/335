@@ -1135,7 +1135,6 @@ void WorldObject::Relocate(float x, float y, float z)
         ((Unit*)this)->m_movementInfo.ChangePosition(x, y, z, GetOrientation());
         if(((Creature*)this)->isVehicle() && IsInWorld())
             ((Vehicle*)this)->RellocatePassengers(GetMap());
-    }
 }
 
 uint32 WorldObject::GetZoneId() const
@@ -1704,6 +1703,8 @@ Creature* WorldObject::SummonCreature(uint32 id, float x, float y, float z, floa
     }
 
     pCreature->Summon(spwtype, despwtime);
+    if (GetTypeId() == TYPEID_UNIT)
+        pCreature->SetCreatorGUID(GetGUID());
 
     if(GetTypeId()==TYPEID_UNIT && ((Creature*)this)->AI())
         ((Creature*)this)->AI()->JustSummoned(pCreature);
