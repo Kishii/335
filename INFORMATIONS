@@ -22,6 +22,7 @@ Mise à jour 2.0 :
     * Correction du sort : Maléfice ( 51514 ).
     * Correction du sort : Piqure ( 56626 ).
     * Correction du sort : Célérité ( 1850 ).
+    * Correction du sort : Désengagement ( 781 ) est utilisable uniquement en combat.
     * Suppression des restriction pour les maître de jeu.
 
 ------------------------------------------------------------------------------------------
