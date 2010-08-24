@@ -6,6 +6,9 @@ Mise à jour 2.0 :
     * Correction de la commande .aura.
     * Correction de la pénétration d'armure.
     * Correction de plusieurs crashs.
+    * Correction des sorts intérrompus, reduction des effets.
+    * Correction du sort : Repentir ( 20066 ) enlève maintenant Vengeance vertueuse ( 61840 ).
+    * Correction du sort : Maléfice ( 51514 ).
     * Suppression des restriction pour les maître de jeu.
     * Implantation des annonces automatiques ont été mise à 30000s -> 60000s.
     * Implantation du nom des maître de jeu des annonces de l'équipe de Gmisland.
@@ -16,6 +19,7 @@ Mise à jour 2.0 :
     * Implantation des véhicules.
     * Implantation des anciens rang pvp.
     * Implantation des level requis pour les enchantements.
+    * Implantation du sort : Tête de taureau ( 53490 ).
 
 ------------------------------------------------------------------------------------------
 Mise à jour 1.2 :
