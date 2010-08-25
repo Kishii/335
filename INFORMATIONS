@@ -37,6 +37,7 @@ Mise à jour 2.0 :
     * Correction du sort : Egide divine ( 47515 ) ne remplace plus le Mot de pouvoir : Bouclier mais maintenant il s'additionne bien.
     * Correction du sort : Disparition ( 26889 ).
     * Correction du sort : Bouclier de foudre ( 49281 ).
+    * Correction du sort : Totem guérisseur ( 58757 ).
     * Suppression des restriction pour les maître de jeu.
 
 ------------------------------------------------------------------------------------------
