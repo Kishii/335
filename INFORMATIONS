@@ -30,6 +30,7 @@ Mise à jour 2.0 :
     * Correction du sort : Désengagement ( 781 ) est utilisable uniquement en combat.
     * Correction du sort : Totem de vague de mana ( 16190 ).
     * Correction du sort : Egide divine ( 47515 ) ne remplace plus le Mot de pouvoir : Bouclier mais maintenant il s'additionne bien.
+    * Correction du sort : Disparition ( 26889 ).
     * Suppression des restriction pour les maître de jeu.
 
 ------------------------------------------------------------------------------------------

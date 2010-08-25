@@ -4309,6 +4309,10 @@ SpellCastResult Spell::CheckCast(bool strict)
             return SPELL_FAILED_CASTER_AURASTATE;
     }
 
+    if(m_caster->isInCombat() && IsNonCombatSpell(m_spellInfo) && !m_caster->isIgnoreUnitState(m_spellInfo)
+       && !m_spellInfo->SpellFamilyFlags & SPELLFAMILYFLAG_ROGUE_STEALTH && m_spellInfo->SpellFamilyFlags & SPELLFAMILYFLAG_ROGUE_VANISH)  // Disparition
+        return SPELL_FAILED_AFFECTING_COMBAT;
+
     // cancel autorepeat spells if cast start when moving
     // (not wand currently autorepeat cast delayed to moving stop anyway in spell update code)
     if( m_caster->GetTypeId() == TYPEID_PLAYER && ((Player*)m_caster)->isMoving() )

@@ -7662,11 +7662,46 @@ void Aura::HandleAuraControlVehicle(bool apply, bool Real)
 
     Unit* target = GetTarget();
     Unit* caster = GetCaster();
-    if (target->GetTypeId() != TYPEID_UNIT || !((Creature*)target)->isVehicle())
+    if (target->GetTypeId() != TYPEID_UNIT)
         return;
     Vehicle* vehicle = (Vehicle*)target;
 
-    if(!caster || !vehicle)
+    Vehicle * vehicle = NULL;
+
+    if (!((Creature*)target)->isVehicle()) // Target is not vehicle, we need to spawn new
+    {
+        if(!caster || caster->GetTypeId() != TYPEID_PLAYER) // We want non-vehicle target being processed only by players
+            return;
+
+        if(!apply)
+            caster->RemoveAurasDueToSpell(GetId());
+        else
+        {
+            float x,y,z;
+            target->GetPosition(x,y,z);
+            vehicle = caster->SummonVehicle(target->GetEntry(), x,y,z, target->GetOrientation());
+			
+            if(!vehicle)
+                return;
+
+            caster->EnterVehicle(vehicle, 0);
+            if(caster->GetTypeId() == TYPEID_PLAYER)
+            {
+                WorldPacket data(SMSG_ON_CANCEL_EXPECTED_RIDE_VEHICLE_AURA, 0);
+                ((Player*)caster)->GetSession()->SendPacket(&data);
+            }
+
+            // if we leave and enter again, this will refresh
+            int32 duration = GetSpellMaxDuration(GetSpellProto());
+            if(duration > 0)
+                vehicle->SetSpawnDuration(duration);
+        }
+
+        return;
+    }
+    else vehicle = (Vehicle*)target;
+
+    if (!caster || !vehicle)
         return;
 
     // this can happen due to wrong caster/target spell handling
