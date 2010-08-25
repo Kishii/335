@@ -1867,6 +1867,22 @@ void Aura::TriggerSpell()
 
                 break;
             }
+            // Puissance terrestre
+            case 6474:
+            {
+                Unit *owner = target->GetOwner();
+
+                if (!owner)
+                    break;
+
+                if (Aura* aura = owner->GetAura(SPELL_AURA_DUMMY, SPELLFAMILY_SHAMAN, 2289, EFFECT_INDEX_0))
+                {
+                    if (roll_chance_i(aura->GetModifier()->m_amount))
+                        target->CastSpell(target, 59566, true, NULL, this);
+                }
+
+                break;
+            }
             case 16191:                                     // Mana Tide
             {
                 triggerTarget->CastCustomSpell(triggerTarget, trigger_spell_id, &m_modifier.m_amount, NULL, NULL, true, NULL, this);
