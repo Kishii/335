@@ -19,6 +19,7 @@ Mise à jour 2.0 :
     * Implantation du sort : Glyphe de bénédiction de sagesse ( 57979 ).
     * Implantation du sort : Glyphe de chasseur corrompu ( 56249 ).
     * Implantation du sort : Balai magique ( 47977 ).
+    * Implantation du sort : Froid intense ( 48094 ).
     * Correction des montures volantes.
     * Correction de la commande .aura.
     * Correction de la pénétration d'armure.
@@ -34,6 +35,7 @@ Mise à jour 2.0 :
     * Correction du sort : Totem de vague de mana ( 16190 ).
     * Correction du sort : Egide divine ( 47515 ) ne remplace plus le Mot de pouvoir : Bouclier mais maintenant il s'additionne bien.
     * Correction du sort : Disparition ( 26889 ).
+    * Correction du sort : Bouclier de foudre ( 49281 ).
     * Suppression des restriction pour les maître de jeu.
 
 ------------------------------------------------------------------------------------------
