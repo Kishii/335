@@ -5933,6 +5933,7 @@ void Aura::HandleShapeshiftBoosts(bool apply)
             break;
         case FORM_SHADOW:
             spellId1 = 49868;
+            spellId2 = 71167;
             break;
         case FORM_GHOSTWOLF:
             spellId1 = 67116;
