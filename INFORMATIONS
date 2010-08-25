@@ -17,12 +17,14 @@ Mise à jour 2.0 :
     * Implantation du sort : Glyphe des épines ( 57862 ).
     * Implantation du sort : Glyphe de bénédiction de puissance ( 57958 ).
     * Implantation du sort : Glyphe de bénédiction de sagesse ( 57979 ).
+    * Implantation du sort : Glyphe de chasseur corrompu ( 56249 ).
     * Correction des montures volantes.
     * Correction de la commande .aura.
     * Correction de la pénétration d'armure.
     * Correction de plusieurs crashs.
     * Correction des sorts intérrompus, reduction des effets.
     * Correction des despawn pour les apparitions temporaires.
+    * Correction des aura de d'invisibilité.
     * Correction du sort : Repentir ( 20066 ) enlève maintenant Vengeance vertueuse ( 61840 ).
     * Correction du sort : Maléfice ( 51514 ).
     * Correction du sort : Piqure ( 56626 ).
