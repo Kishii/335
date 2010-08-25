@@ -8717,18 +8717,6 @@ int32 Unit::CalculateSpellDamage(Unit const* target, SpellEntry const* spellProt
             (spellProto->Effect[effect_index] != SPELL_EFFECT_APPLY_AURA || spellProto->EffectApplyAuraName[effect_index] != SPELL_AURA_MOD_DECREASE_SPEED))
         value = int32(value*0.25f*exp(getLevel()*(70-spellProto->spellLevel)/1000.0f));
 
-    // Frostbite trigger aura: if Fingers of Frost is active, it has saved a roll:
-    if(spellProto->EffectTriggerSpell[effect_index] == 12494)
-    {
-        sLog.outDebug("CalculateSpellDamage: called for 12494 (Frostbite), chance is: %u", value);
-        if(m_lastAuraProcRoll >=0) //override independent trigger
-        {
-            sLog.outDebug("CalculateSpellDamage: saved roll from FoF is: %f", m_lastAuraProcRoll);
-            return value > m_lastAuraProcRoll ? 100 : 0;
-        }
-        sLog.outDebug("CalculateSpellDamage: no  saved roll for 12494 (Frostbite)");
-    }
-
     return value;
 }
 
@@ -9714,9 +9702,6 @@ void Unit::ProcDamageAndSpellFor( bool isVictim, Unit * pTarget, uint32 procFlag
 
     RemoveSpellList removedSpells;
     ProcTriggeredList procTriggered;
-    // reset saved roll from Fingers of Frost:
-    if(GetTypeId() == TYPEID_PLAYER)
-        m_lastAuraProcRoll = -1.0f;
     // Fill procTriggered list
     for(SpellAuraHolderMap::const_iterator itr = GetSpellAuraHolderMap().begin(); itr!= GetSpellAuraHolderMap().end(); ++itr)
     {
@@ -9813,14 +9798,6 @@ void Unit::ProcDamageAndSpellFor( bool isVictim, Unit * pTarget, uint32 procFlag
         // Remove auras from removedAuras
         for(RemoveSpellList::const_iterator i = removedSpells.begin(); i != removedSpells.end();++i)
             RemoveAuraHolderFromStack(*i);
-    }
-
-    // Fingers of Frost: save roll for re-use in Frostbite trigger
-    if(aura->GetSpellProto()->EffectTriggerSpell[aura->GetEffIndex()] == 44544)
-    {
-        sLog.outDebug("Fingers of Frost: saving roll; triggered by %u", aura->GetId());
-        m_lastAuraProcRoll = rand_chance();
-        return chance > m_lastAuraProcRoll;
     }
 }
 

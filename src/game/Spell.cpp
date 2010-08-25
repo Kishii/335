@@ -2832,6 +2832,9 @@ void Spell::cast(bool skipCheck)
             if (m_spellInfo->SpellFamilyFlags & UI64LIT(0x0000008000000000))
                 AddPrecastSpell(41425);                     // Hypothermia
             break;
+            // Fingers of Frost
+            else if (m_spellInfo->Id == 44544)
+                AddPrecastSpell(74396);
         }
         case SPELLFAMILY_WARRIOR:
         {
@@ -3368,22 +3371,19 @@ void Spell::finish(bool ok)
     if( m_spellInfo->Attributes & SPELL_ATTR_STOP_ATTACK_TARGET )
         m_caster->AttackStop();
 
-    // For SPELL_AURA_IGNORE_UNIT_STATE charges
-    // TODO: find way without this hack
+    // hack for Fingers of Frost stacks remove
+    if(m_caster->HasAura(74396) && !m_IsTriggeredSpell && m_spellInfo->SpellFamilyName == SPELLFAMILY_MAGE)
+        if (Aura *aur = m_caster->GetAura(74396, EFFECT_INDEX_0))
+            if(aur->GetHolder()->DropAuraCharge())
+                m_caster->RemoveAura(aur);
+
+    // hack for SPELL_AURA_IGNORE_UNIT_STATE charges
     bool break_for = false;
     Unit::AuraList const& stateAuras = m_caster->GetAurasByType(SPELL_AURA_IGNORE_UNIT_STATE);
     for(Unit::AuraList::const_iterator j = stateAuras.begin();j != stateAuras.end(); ++j)
     {
         switch((*j)->GetId())
         {
-            case 44544: // Fingers of Frost dissapear after two spells
-                if(!m_IsTriggeredSpell && m_spellInfo->SpellFamilyName == SPELLFAMILY_MAGE)
-                {
-                    if((*j)->DropAuraCharge())
-                        m_caster->RemoveAura((*j));
-                    break_for = true;
-                }
-                break; 
             case 52437:        //Sudden death should disappear after execute
                 if (m_spellInfo->SpellIconID == 1648)
                 {

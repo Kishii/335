@@ -2116,6 +2116,19 @@ void Aura::HandleAuraDummy(bool apply, bool Real)
                 }
                 break;
             }
+            case SPELLFAMILY_MAGE:
+            {
+                // hack for Fingers of Frost stacks
+                if (GetId() == 74396)
+                {
+                    if (Aura *aur = target->GetAura(74396, EFFECT_INDEX_0))
+                    {
+                        if (aur->GetStackAmount() < 3)
+                            GetHolder()->SetAuraCharges(3);
+                    }
+                }
+                break;
+            }
             case SPELLFAMILY_SHAMAN:
             {
                 // Tidal Force
@@ -2286,6 +2299,12 @@ void Aura::HandleAuraDummy(bool apply, bool Real)
                 {
                     target->CastSpell(target, 58601, true); // Remove Flight Auras (also triggered Parachute (45472))
                 }
+                return;
+            }
+            case 74396:                                     // Fingers of Frost effect remove
+            {
+                if (GetHolder()->GetAuraCharges() <= 0)
+                    target->RemoveAurasDueToSpell(44544);
                 return;
             }
         }
@@ -7624,41 +7643,15 @@ void Aura::HandlePhase(bool apply, bool Real)
 
 void Aura::HandleIgnoreUnitState(bool apply, bool Real)
 {
-    if(m_target->GetTypeId() != TYPEID_PLAYER || !Real)
+
+    Unit *target = GetTarget();
+
+    if(target->GetTypeId() != TYPEID_PLAYER || !Real)
         return;
 
-    if(Unit* caster = GetCaster())
-    {
-        if (apply)
-        {
-            switch(GetId())
-            {
-                // Fingers of Frost
-                case 44544:
-                    SetAuraCharges(3); // 3 because first is droped on proc
-                    break;
-                // Juggernaut & Warbringer both need special slot and flag
-                // for alowing charge in combat and Warbringer
-                // for alowing charge in different stances, too
-                case 64976:
-                case 57499:
-                    SetAuraSlot(255);
-                    SetAuraFlags(19);
-                    SendAuraUpdate(false);
-                    break;
-            }
-        }
-        else
-        {
-            switch(GetId())
-            {
-                case 64976:
-                case 57499:
-                    SendAuraUpdate(true);
-                    break;
-            }
-        }
-    }
+    // for alowing charge/intercept/intervene in different stances
+    if (GetId() == 57499 && apply)
+        GetHolder()->SetAuraFlags(19);
 }
 
 void Aura::HandleAuraSafeFall( bool Apply, bool Real )
@@ -8290,8 +8283,20 @@ bool SpellAuraHolder::IsNeedVisibleSlot(Unit const* caster) const
         return true;
     else if (IsSpellHaveAura(m_spellProto, SPELL_AURA_MOD_IGNORE_SHAPESHIFT))
         return true;
-    else if (IsSpellHaveAura(m_spellProto, SPELL_AURA_262))
+    else if (IsSpellHaveAura(m_spellProto, SPELL_AURA_IGNORE_UNIT_STATE))
         return true;
+
+    // special aura type cases 
+    for(int i = 0; i < MAX_EFFECT_INDEX; ++i)
+    {
+        switch (m_spellProto->EffectApplyAuraName[i])
+        {
+		    case SPELL_AURA_IGNORE_UNIT_STATE:
+			    return true;    // requires visible slot to enable client side effect
+            default:
+                break;
+        }
+    }
 
     // passive auras (except totem auras) do not get placed in the slots
     return !m_isPassive || totemAura || HasAreaAuraEffect(m_spellProto);

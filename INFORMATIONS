@@ -30,6 +30,7 @@ Mise à jour 2.0 :
     * Implantation du sort : Puissance terrestre ( 51523 ).
     * Implantation du sort : Danse de l'ombre ( 51713 ).
     * Implantation du sort : Doigts de givre ( ID : 44543 ).
+    * Implantation du sort : Poigne de la mort ( ID : 49576 ).
     * Correction des montures volantes.
     * Correction de la commande .aura.
     * Correction de la pénétration d'armure.
@@ -37,6 +38,7 @@ Mise à jour 2.0 :
     * Correction des sorts intérrompus, reduction des effets.
     * Correction des despawn pour les apparitions temporaires.
     * Correction des aura de d'invisibilité.
+    * Correction d'exploit de bug en arènes.
     * Correction du sort : Repentir ( 20066 ) enlève maintenant Vengeance vertueuse ( 61840 ).
     * Correction du sort : Maléfice ( 51514 ).
     * Correction du sort : Piqure ( 56626 ).
