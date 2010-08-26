@@ -39,6 +39,7 @@ Mise à jour 2.0 :
     * Implantation du sort : Feu et soufre ( 47270 ).
     * Implantation du sort : Totem brisant ( 60764 ).
     * Implantation du sort : Activer l'assemblage ( 62488 ).
+    * Implantation du sort : Soif de sang ( 51662 ).
     * Correction des montures volantes.
     * Correction de la commande .aura.
     * Correction de la pénétration d'armure.
@@ -64,6 +65,8 @@ Mise à jour 2.0 :
     * Correction du sort : Maîtrise des auras ( 31821 ).
     * Correction du sort : Rupture ( 48672 ).
     * Correction du sort : Conflagration ( 17962 ).
+    * Correction du sort : Hymne à l'espoir ( 64904 ).
+    * Correction du sort : Hymne divin ( 64844 ).
     * Suppression des restriction pour les maître de jeu.
 
 ------------------------------------------------------------------------------------------
