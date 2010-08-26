@@ -12,6 +12,7 @@ Mise à jour 2.0 :
     * Implantation des anciens rang pvp.
     * Implantation des level requis pour les enchantements.
     * Implantation de l'autorisation d'avoir une monture dans Ulduar.
+    * Implantation des 10% de reductions d'heal.
     * Implantation du sort : Tête de taureau ( 53490 ).
     * Implantation du sort : Série meurtrière ( 51690 ).
     * Implantation du sort : Chevaliers inflexibles ( 38164 ).
@@ -69,6 +70,7 @@ Mise à jour 2.0 :
     * Correction du sort : Hymne divin ( 64844 ).
     * Correction du sort : Nitro-survolteurs ( 55004 ) est maintenant inutilisable avec le Drapeau du Goulet.
     * Correction du sort : Entraînement de sniper ( 53304 ), se recast toute les 6 secondes.
+    * Correction du sort : Dissuasion ( 19263 ).
     * Suppression des restriction pour les maître de jeu.
 
 ------------------------------------------------------------------------------------------

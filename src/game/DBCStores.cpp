@@ -175,6 +175,7 @@ DBCStorage <TaxiPathEntry> sTaxiPathStore(TaxiPathEntryfmt);
 TaxiPathNodesByPath sTaxiPathNodesByPath;
 static DBCStorage <TaxiPathNodeEntry> sTaxiPathNodeStore(TaxiPathNodeEntryfmt);
 
+DBCStorage <TeamContributionPointsEntry> sTeamContributionPointsStore(TeamContributionPointsEntryfmt);
 DBCStorage <TotemCategoryEntry> sTotemCategoryStore(TotemCategoryEntryfmt);
 DBCStorage <VehicleEntry> sVehicleStore(VehicleEntryfmt);
 DBCStorage <VehicleSeatEntry> sVehicleSeatStore(VehicleSeatEntryfmt);
@@ -357,7 +358,7 @@ void LoadDBCStores(const std::string& dataPath)
         exit(1);
     }
 
-    const uint32 DBCFilesCount = 85;
+    const uint32 DBCFilesCount = 86;
 
     barGoLink bar( (int)DBCFilesCount );
 
@@ -632,11 +633,12 @@ void LoadDBCStores(const std::string& dataPath)
         }
     }
 
-    LoadDBC(availableDbcLocales,bar,bad_dbc_files,sTotemCategoryStore,       dbcPath,"TotemCategory.dbc");
-    LoadDBC(availableDbcLocales,bar,bad_dbc_files,sVehicleStore,             dbcPath,"Vehicle.dbc");
-    LoadDBC(availableDbcLocales,bar,bad_dbc_files,sVehicleSeatStore,         dbcPath,"VehicleSeat.dbc");
-    LoadDBC(availableDbcLocales,bar,bad_dbc_files,sWorldMapAreaStore,        dbcPath,"WorldMapArea.dbc");
-    LoadDBC(availableDbcLocales,bar,bad_dbc_files,sWMOAreaTableStore,        dbcPath,"WMOAreaTable.dbc");
+	LoadDBC(availableDbcLocales,bar,bad_dbc_files,sTeamContributionPointsStore, dbcPath,"TeamContributionPoints.dbc");
+    LoadDBC(availableDbcLocales,bar,bad_dbc_files,sTotemCategoryStore,          dbcPath,"TotemCategory.dbc");
+    LoadDBC(availableDbcLocales,bar,bad_dbc_files,sVehicleStore,                dbcPath,"Vehicle.dbc");
+    LoadDBC(availableDbcLocales,bar,bad_dbc_files,sVehicleSeatStore,            dbcPath,"VehicleSeat.dbc");
+    LoadDBC(availableDbcLocales,bar,bad_dbc_files,sWorldMapAreaStore,           dbcPath,"WorldMapArea.dbc");
+    LoadDBC(availableDbcLocales,bar,bad_dbc_files,sWMOAreaTableStore,           dbcPath,"WMOAreaTable.dbc");
     for(uint32 i = 0; i < sWMOAreaTableStore.GetNumRows(); ++i)
     {
         if(WMOAreaTableEntry const* entry = sWMOAreaTableStore.LookupEntry(i))
