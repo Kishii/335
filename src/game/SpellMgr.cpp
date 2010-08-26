@@ -374,6 +374,9 @@ SpellSpecific GetSpellSpecific(uint32 spellId)
                 else if (drink)
                     return SPELL_DRINK;
             }
+            // Trauma
+            else if (spellId == 46856 || spellId == 46857)
+                return SPELL_BLEED_DEBUFF;
             else
             {
                 // Well Fed buffs (must be exclusive with Food / Drink replenishment effects, or else Well Fed will cause them to be removed)
@@ -423,6 +426,13 @@ SpellSpecific GetSpellSpecific(uint32 spellId)
                 (spellInfo->InterruptFlags & SPELL_INTERRUPT_FLAG_AUTOATTACK) &&
                 (spellInfo->SpellIconID == 52 || spellInfo->SpellIconID == 79))
                 return SPELL_WELL_FED;
+            break;
+        }
+        case SPELLFAMILY_DRUID:
+        {
+            // Mangle (Cat/Bear)
+            if (spellInfo->SpellFamilyFlags & UI64LIT(0x44000000000))
+                return SPELL_BLEED_DEBUFF;
             break;
         }
         case SPELLFAMILY_HUNTER:
@@ -539,6 +549,7 @@ bool IsSingleFromSpellSpecificPerTarget(SpellSpecific spellSpec1,SpellSpecific s
         case SPELL_MAGE_POLYMORPH:
         case SPELL_PRESENCE:
         case SPELL_WELL_FED:
+        case SPELL_BLEED_DEBUFF:
             return spellSpec1==spellSpec2;
         case SPELL_BATTLE_ELIXIR:
             return spellSpec2==SPELL_BATTLE_ELIXIR
