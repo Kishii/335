@@ -67,6 +67,8 @@ Mise à jour 2.0 :
     * Correction du sort : Conflagration ( 17962 ).
     * Correction du sort : Hymne à l'espoir ( 64904 ).
     * Correction du sort : Hymne divin ( 64844 ).
+    * Correction du sort : Nitro-survolteurs ( 55004 ) est maintenant inutilisable avec le Drapeau du Goulet.
+    * Correction du sort : Entraînement de sniper ( 53304 ), se recast toute les 6 secondes.
     * Suppression des restriction pour les maître de jeu.
 
 ------------------------------------------------------------------------------------------

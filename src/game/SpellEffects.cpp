@@ -1729,6 +1729,13 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                     else                                    // Knocked Up   - backfire 5%
                         m_caster->CastSpell(m_caster, 46014, true, m_CastItem);
 
+                    if (m_caster->GetTypeId() == TYPEID_PLAYER)
+                    {
+                        Player* player = (Player*)m_caster;
+
+                        if (BattleGround *bg = player->GetBattleGround())
+                            bg->EventPlayerDroppedFlag(player);
+                    }
                     return;
                 }
                 case 55818:                                 // Hurl Boulder
