@@ -41,6 +41,7 @@ class MANGOS_DLL_SPEC Config
         float GetFloatDefault(const char* name, const float def);
 
         std::string GetFilename() const { return mFilename; }
+        ACE_Thread_Mutex mMtx;
 
     private:
 

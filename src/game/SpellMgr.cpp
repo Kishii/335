@@ -622,16 +622,13 @@ bool IsExplicitNegativeTarget(uint32 targetA)
     return false;
 }
 
-bool IsPositiveEffect(uint32 spellId, SpellEffectIndex effIndex)
+bool IsPositiveEffect(SpellEntry const *spellproto, SpellEffectIndex effIndex)
 {
-    SpellEntry const *spellproto = sSpellStore.LookupEntry(spellId);
-    if (!spellproto) return false;
-
     switch(spellproto->Effect[effIndex])
     {
         case SPELL_EFFECT_DUMMY:
             // some explicitly required dummy effect sets
-            switch(spellId)
+            switch(spellproto->Id)
             {
                 case 28441:                                 // AB Effect 000
                     return false;
@@ -702,7 +699,7 @@ bool IsPositiveEffect(uint32 spellId, SpellEffectIndex effIndex)
                 case SPELL_AURA_ADD_TARGET_TRIGGER:
                     return true;
                 case SPELL_AURA_PERIODIC_TRIGGER_SPELL:
-                    if (spellId != spellproto->EffectTriggerSpell[effIndex])
+                    if (spellproto->Id != spellproto->EffectTriggerSpell[effIndex])
                     {
                         uint32 spellTriggeredId = spellproto->EffectTriggerSpell[effIndex];
                         SpellEntry const *spellTriggeredProto = sSpellStore.LookupEntry(spellTriggeredId);
@@ -715,7 +712,7 @@ bool IsPositiveEffect(uint32 spellId, SpellEffectIndex effIndex)
                                 // if non-positive trigger cast targeted to positive target this main cast is non-positive
                                 // this will place this spell auras as debuffs
                                 if (IsPositiveTarget(spellTriggeredProto->EffectImplicitTargetA[effIndex],spellTriggeredProto->EffectImplicitTargetB[effIndex]) &&
-                                    !IsPositiveEffect(spellTriggeredId,SpellEffectIndex(i)))
+                                    !IsPositiveEffect(spellTriggeredProto, SpellEffectIndex(i)))
                                     return false;
                             }
                         }
@@ -839,18 +836,32 @@ bool IsPositiveEffect(uint32 spellId, SpellEffectIndex effIndex)
     return true;
 }
 
-bool IsPositiveSpell(uint32 spellId)
+bool IsPositiveEffect(uint32 spellId, SpellEffectIndex effIndex)
 {
-    SpellEntry const *spellproto = sSpellStore.LookupEntry(spellId);
-    if (!spellproto)
+    SpellEntry const *spellProto = sSpellStore.LookupEntry(spellId);
+    if (!spellProto)
         return false;
 
-    // spells with atleast one negative effect are considered negative
+    return IsPositiveEffect(spellProto, effIndex);
+}
+
+bool IsPositiveSpell(SpellEntry const *spellProto)
+{
+    // spells with at least one negative effect are considered negative
     // some self-applied spells have negative effects but in self casting case negative check ignored.
     for (int i = 0; i < MAX_EFFECT_INDEX; ++i)
-        if (!IsPositiveEffect(spellId, SpellEffectIndex(i)))
+        if (!IsPositiveEffect(spellProto, SpellEffectIndex(i)))
             return false;
     return true;
+}
+
+bool IsPositiveSpell(uint32 spellId)
+{
+    SpellEntry const *spellProto = sSpellStore.LookupEntry(spellId);
+    if (!spellProto)
+        return false;
+
+    return IsPositiveSpell(spellProto);
 }
 
 bool IsSingleTargetSpell(SpellEntry const *spellInfo)
@@ -2161,6 +2172,12 @@ bool SpellMgr::IsNoStackSpellDueToSpell(uint32 spellId_1, uint32 spellId_2) cons
             break;
     }
 
+    if (spellInfo_1->SpellFamilyName == SPELLFAMILY_GENERIC || spellInfo_2->SpellFamilyName == SPELLFAMILY_GENERIC)
+        return false;
+
+    if (spellInfo_1->SpellFamilyName != spellInfo_2->SpellFamilyName)
+        return false;
+
     // more generic checks
     if (spellInfo_1->SpellIconID == spellInfo_2->SpellIconID &&
         spellInfo_1->SpellIconID != 0 && spellInfo_2->SpellIconID != 0)
@@ -2181,12 +2198,6 @@ bool SpellMgr::IsNoStackSpellDueToSpell(uint32 spellId_1, uint32 spellId_2) cons
 
     if (IsRankSpellDueToSpell(spellInfo_1, spellId_2))
         return true;
-
-    if (spellInfo_1->SpellFamilyName == 0 || spellInfo_2->SpellFamilyName == 0)
-        return false;
-
-    if (spellInfo_1->SpellFamilyName != spellInfo_2->SpellFamilyName)
-        return false;
 
     bool dummy_only = true;
     for (int i = 0; i < MAX_EFFECT_INDEX; ++i)
@@ -2290,7 +2301,7 @@ SpellEntry const* SpellMgr::SelectAuraRankForLevel(SpellEntry const* spellInfo, 
             IsAreaEffectPossitiveTarget(Targets(spellInfo->EffectImplicitTargetA[i])))) ||
             spellInfo->Effect[i] == SPELL_EFFECT_APPLY_AREA_AURA_PARTY ||
             spellInfo->Effect[i] == SPELL_EFFECT_APPLY_AREA_AURA_RAID) &&
-            IsPositiveEffect(spellInfo->Id, SpellEffectIndex(i)))
+            IsPositiveEffect(spellInfo, SpellEffectIndex(i)))
         {
             needRankSelection = true;
             break;

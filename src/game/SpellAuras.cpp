@@ -2338,10 +2338,8 @@ void Aura::HandleAuraDummy(bool apply, bool Real)
         // Living Bomb
         if (GetSpellProto()->SpellFamilyName == SPELLFAMILY_MAGE && (GetSpellProto()->SpellFamilyFlags & UI64LIT(0x2000000000000)))
         {
-            // Zero duration is equal to AURA_REMOVE_BY_DEFAULT. We can't use it directly, as it is set even
-            // when removing aura from one target due to casting Living Bomb at other.
-            if (m_duration == 0 || m_removeMode == AURA_REMOVE_BY_DISPEL)
-                target->CastSpell(target,m_modifier.m_amount,true,NULL,this);
+            if (m_removeMode == AURA_REMOVE_BY_EXPIRE || m_removeMode == AURA_REMOVE_BY_DISPEL)
+                target->CastSpell(target, m_modifier.m_amount, true, NULL, this);
 
             return;
         }
@@ -6274,8 +6272,8 @@ void Aura::HandleAuraRetainComboPoints(bool apply, bool Real)
 
     // combo points was added in SPELL_EFFECT_ADD_COMBO_POINTS handler
     // remove only if aura expire by time (in case combo points amount change aura removed without combo points lost)
-    if( !apply && m_duration==0 && target->GetComboTarget())
-        if(Unit* unit = ObjectAccessor::GetUnit(*GetTarget(),target->GetComboTarget()))
+    if (!apply && m_removeMode == AURA_REMOVE_BY_EXPIRE && target->GetComboTarget())
+        if (Unit* unit = ObjectAccessor::GetUnit(*GetTarget(), target->GetComboTarget()))
             target->AddComboPoints(unit, -m_modifier.m_amount);
 }
 
@@ -6596,7 +6594,9 @@ void Aura::PeriodicTick()
             uint32 procVictim   = PROC_FLAG_ON_TAKE_PERIODIC;// | PROC_FLAG_TAKEN_HARMFUL_SPELL_HIT;
             pdamage = (pdamage <= absorb + resist) ? 0 : (pdamage - absorb - resist);
 
-            SpellPeriodicAuraLogInfo pInfo(this, pdamage, 0, absorb, resist, 0.0f, isCrit);
+            uint32 overkill = pdamage > target->GetHealth() ? pdamage - target->GetHealth() : 0;
+
+            SpellPeriodicAuraLogInfo pInfo(this, pdamage, overkill, absorb, resist, 0.0f, isCrit);
             target->SendPeriodicAuraLog(&pInfo);
 
             if (pdamage)
@@ -6674,9 +6674,6 @@ void Aura::PeriodicTick()
                 pdamage -= target->GetSpellDamageReduction(pdamage);
 
             target->CalculateAbsorbAndResist(pCaster, GetSpellSchoolMask(spellProto), DOT, pdamage, &absorb, &resist, !(spellProto->AttributesEx2 & SPELL_ATTR_EX2_CANT_REFLECTED));
-
-            if(target->GetHealth() < pdamage)
-                pdamage = uint32(target->GetHealth());
 
             DETAIL_FILTER_LOG(LOG_FILTER_PERIODIC_AFFECTS, "PeriodicTick: %u (TypeId: %u) health leech of %u (TypeId: %u) for %u dmg inflicted by %u abs is %u",
                 GUID_LOPART(GetCasterGUID()), GuidHigh2TypeId(GUID_HIPART(GetCasterGUID())), target->GetGUIDLow(), target->GetTypeId(), pdamage, GetId(),absorb);
