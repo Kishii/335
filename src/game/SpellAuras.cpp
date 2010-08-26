@@ -7289,6 +7289,12 @@ void Aura::PeriodicDummyTick()
                         case 2: target->CastSpell(target, 55739, true); break;
                     }
                     return;
+                case 62717:                                 // Slag Pot (10 man)
+                    target->CastSpell(target, 65722, true, NULL, this);
+                    return;
+                case 63477:                                 // Slag Pot (25 man)
+                    target->CastSpell(target, 65723, true, NULL, this);
+                    return;
 // Exist more after, need add later
                 default:
                     break;
@@ -8422,6 +8428,24 @@ void SpellAuraHolder::HandleSpellSpecificBoosts(bool apply)
                     {
                         cast_at_remove = true;
                         spellId1 = 60242;                   // Darkmoon Card: Illusion
+                    }
+                    else
+                        return;
+                    break;
+                case 62717:                                 // Slag Pot (10 man)
+                    if (!apply && m_removeMode == AURA_REMOVE_BY_EXPIRE)
+                    {
+                        cast_at_remove = true;
+                        spellId1 = 62836;                   // Slag Imbued
+                    }
+                    else
+                        return;
+                    break;
+                case 63477:                                 // Slag Pot (25 man)
+                    if (!apply && m_removeMode == AURA_REMOVE_BY_EXPIRE)
+                    {
+                        cast_at_remove = true;
+                        spellId1 = 63536;                   // Slag Imbued
                     }
                     else
                         return;
