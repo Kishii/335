@@ -6767,6 +6767,19 @@ bool Unit::IsSpellCrit(Unit *pVictim, SpellEntry const *spellProto, SpellSchoolM
             break;
         }
         case SPELL_DAMAGE_CLASS_MELEE:
+        {
+            // Ferocious Bite crit chance with Rend and Tear
+            if (spellProto->SpellFamilyName == SPELLFAMILY_DRUID && (spellProto->SpellFamilyFlags & UI64LIT(0x800000)) && spellProto->SpellIconID == 1680)
+            {
+                if (pVictim->HasAuraState(AURA_STATE_BLEEDING))
+                {
+                    if (Aura* aura = GetAura(SPELL_AURA_DUMMY, SPELLFAMILY_DRUID, 2859, EFFECT_INDEX_1))
+                        crit_chance += aura->GetModifier()->m_amount;
+                }
+            }
+
+            // do not use break here
+        }
         case SPELL_DAMAGE_CLASS_RANGED:
         {
             if (pVictim)
