@@ -13,6 +13,7 @@ Mise à jour 2.0 :
     * Implantation des level requis pour les enchantements.
     * Implantation de l'autorisation d'avoir une monture dans Ulduar.
     * Implantation des 10% de reductions d'heal.
+    * Implantation de l'honneur des kills stats en champs de batailles.
     * Implantation du sort : Tête de taureau ( 53490 ).
     * Implantation du sort : Série meurtrière ( 51690 ).
     * Implantation du sort : Chevaliers inflexibles ( 38164 ).
@@ -41,6 +42,7 @@ Mise à jour 2.0 :
     * Implantation du sort : Totem brisant ( 60764 ).
     * Implantation du sort : Activer l'assemblage ( 62488 ).
     * Implantation du sort : Soif de sang ( 51662 ).
+    * Implantation du sort : Berserk ( 50334 ).
     * Correction des montures volantes.
     * Correction de la commande .aura.
     * Correction de la pénétration d'armure.
@@ -78,7 +80,6 @@ Mise à jour 2.0 :
     * Correction du sort : Mutilation ( 48566 ).
     * Correction du sort : Traumatisme ( 46857 ).
     * Correction du sort : Mort soudaine ( 29724 ).
-    * Correction du sort : Berserk ( 50334 ).
     * Suppression des restriction pour les maître de jeu.
     * Suppression des enchantements temporaire à chaque changement de spécialisations.
 
