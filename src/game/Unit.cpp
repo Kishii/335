@@ -6333,6 +6333,16 @@ uint32 Unit::SpellDamageBonusDone(Unit *pVictim, SpellEntry const *spellProto, u
                 if (pVictim->GetHealth() * 100 / pVictim->GetMaxHealth() <= 25)
                     DoneTotalMod *= 4;
             }
+            // Chaos Bolt & Incinerate
+            else if (spellProto->SpellFamilyFlags & UI64LIT(0x0002004000000000))
+            {
+                if (pVictim->HasAuraState(AURA_STATE_CONFLAGRATE))
+                {
+                    // Look for Fire and Brimstone
+                    if (Aura* aura = GetAura(SPELL_AURA_DUMMY, SPELLFAMILY_WARLOCK, 3173, EFFECT_INDEX_0))
+                         DoneTotalMod *= (aura->GetModifier()->m_amount + 100.0f) / 100.0f;
+                }
+            }
             else if (spellProto->TargetAuraState == AURA_STATE_CONFLAGRATE)
                 return pdamage;
             break;
