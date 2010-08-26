@@ -523,6 +523,12 @@ struct AreaTableEntry
     char*   area_name[16];                                  // 11-26
                                                             // 27, string flags, unused
     uint32  team;                                           // 28
+
+    // helpers
+    bool IsSanctuary() const
+    {
+        return flags & AREA_FLAG_SANCTUARY;
+    }
 };
 
 struct AreaGroupEntry
