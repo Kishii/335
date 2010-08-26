@@ -4049,6 +4049,13 @@ bool Unit::AddSpellAuraHolder(SpellAuraHolder *holder)
                 RemoveSpellAuraHolder(foundHolder, AURA_REMOVE_BY_STACK);
                 break;
             }
+            
+			// Judgements are always single
+            else if (GetSpellSpecific(Aur->GetId()) == SPELL_JUDGEMENT)
+            {
+			    RemoveAura(foundHolder,AURA_REMOVE_BY_STACK);
+                break;
+            }
 
             bool stop = false;
 
