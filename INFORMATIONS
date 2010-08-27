@@ -8,12 +8,13 @@ Mise à jour 2.0 :
     * Implantation de stats supplémentaires pour l'armurerie.
     * Implantation de l'arène de Dalaran.
     * Implantation de l'arène de Orgrimmar.
-    * Implantation des véhicules.
+    * Implantation des véhicules, tournois d'argent compris.
     * Implantation des anciens rang pvp.
     * Implantation des level requis pour les enchantements.
     * Implantation de l'autorisation d'avoir une monture dans Ulduar.
     * Implantation des 10% de reductions d'heal.
     * Implantation de l'honneur des kills stats en champs de batailles.
+    * Implantation des parchemins Vellums.
     * Implantation du sort : Tête de taureau ( 53490 ).
     * Implantation du sort : Série meurtrière ( 51690 ).
     * Implantation du sort : Chevaliers inflexibles ( 38164 ).
@@ -80,6 +81,7 @@ Mise à jour 2.0 :
     * Correction du sort : Mutilation ( 48566 ).
     * Correction du sort : Traumatisme ( 46857 ).
     * Correction du sort : Mort soudaine ( 29724 ).
+    * Correction du sort : Synergie gangrenée ( 47230 ).
     * Suppression des restriction pour les maître de jeu.
     * Suppression des enchantements temporaire à chaque changement de spécialisations.
 
