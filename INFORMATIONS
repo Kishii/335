@@ -43,6 +43,7 @@ Mise à jour 2.0 :
     * Implantation du sort : Glyphe de vague explosive ( 62126 ).
     * Implantation du sort : Glyphe de boule de feu ( 56368 ).
     * Implantation du sort : Glyphe d'éclair de givre ( 56370 ).
+    * Implantation du sort : Glyphe de lambeau ( 56957 ).
     * Implantation du sort : Sacrifice démoniaque ( 18788 ).
     * Implantation du sort : Faire détoner mana (Kel'Thuzad in Naxxramas) ( 27819 ).
     * Implantation du sort : Don du moissonneur ( 52479 ).
@@ -81,6 +82,46 @@ Mise à jour 2.0 :
     * Implantation du sort : Ecorce des marcheurs ( 43404 ).
     * Implantation du sort : Ecorce des marcheurs ( 47530 ).
     * Implantation du sort : Item - Icecrown 25 Normal Healer Trinket 2 ( 71611 ).
+    * Implantation du sort : Item - Icecrown 25 Normal Healer Trinket 2 ( 71611 ).
+    * Implantation du sort : Commandant du Repos du ver ( 71541 ).
+    * Implantation du sort : Empressement des éléments ( 65005 ).
+    * Implantation du sort : Item - Shaman T9 Restoration Relic (Chain Heal) ( 67389 ).
+    * Implantation du sort : Item - Icecrown 10 Normal Melee Trinket ( 71402 ).
+    * Implantation du sort : Item - Icecrown 10 Heroic Melee Trinket ( 71540 ).
+    * Implantation du sort : Item - Icecrown 25 Normal Melee Trinket ( 71519 ).
+    * Implantation du sort : Item - Icecrown 25 Heroic Melee Trinket ( 71562 ).
+    * Implantation du sort : Item - Icecrown 25 Normal Caster Trinket 1 Base ( 71602 ).
+    * Implantation du sort : Item - Icecrown 25 Normal Caster Trinket 2 ( 71606 ).
+    * Implantation du sort : Item - Icecrown 25 Heroic Caster Trinket 2 ( 71637 ).
+    * Implantation du sort : Item - Icecrown 25 Heroic Caster Trinket 1 Base ( 71645 ).
+    * Implantation du sort : Item - Death Knight T10 Tank 4P Bonus ( 71652 ).
+    * Implantation du sort : Item - Paladin T10 Protection 4P Bonus ( 70761 ).
+    * Implantation du sort : Item - Paladin T10 Holy 4P Bonus ( 70756 ).
+    * Implantation du sort : Item - Hunter T10 2P Bonus ( 70727 ).
+    * Implantation du sort : Item - Hunter T10 4P Bonus ( 70730 ).
+    * Implantation du sort : Item - Priest T10 Healer 4P Bonus ( 70798 ).
+    * Implantation du sort : Item - Shaman T10 Restoration 4P Bonus ( 70808 ).
+    * Implantation du sort : Item - Druid T10 Balance 4P Bonus ( 70723 ).
+    * Implantation du sort : Item - Rogue T10 2P Bonus ( 70805 ).
+    * Implantation du sort : Item - Rogue T10 4P Bonus ( 70803 ).
+    * Implantation du sort : Item - Shaman T10 Elemental 4P Bonus ( 70817 ).
+    * Implantation du sort : Item - Shaman T10 Enhancement 2P Bonus ( 70830 ).
+    * Implantation du sort : Item - Warlock T10 4P Bonus ( 70841 ).
+    * Implantation du sort : Item - Warrior T10 Melee 2P Bonus ( 70854 ).
+    * Implantation du sort : Item - Shaman T9 Elemental Relic (Lightning Bolt) ( 67386 ).
+    * Implantation du sort : Item - Druid T8 Feral Relic ( 64952 ).
+    * Implantation du sort : Coliseum 5 Tank Trinket ( 67653 ).
+    * Implantation du sort : Coliseum 5 CasterTrinket ( 67670 ).
+    * Implantation du sort : Coliseum 5 Melee Trinket ( 67672 ).
+    * Implantation du sort : Coliseum 5 Healer Trinket ( 67667 ).
+    * Implantation du sort : Impact ( 64343 ).
+    * Implantation du sort : Waylay ( 51696 ).
+    * Implantation du sort : Flot de connaissances (62114 ).
+    * Implantation du sort : Val'anyr, Hammer of Ancient Kings ( 64415 ).
+    * Implantation du sort : Eisige Finger ( 44545 ).
+    * Implantation du sort : Item - Paladin T10 Holy 2P Bonus ( 70755 ).
+    * Implantation du sort : Item - Priest T10 Healer 2P Bonus ( 70770 ).
+    * Implantation du sort : Totem de griffes de pierre ( 58591 ).
     * Correction des montures volantes.
     * Correction de la commande .aura.
     * Correction de la pénétration d'armure.
