@@ -399,6 +399,9 @@ SpellSpecific GetSpellSpecific(uint32 spellId)
             if ((spellInfo->SpellFamilyFlags & UI64LIT(0x1000000)) && spellInfo->EffectApplyAuraName[EFFECT_INDEX_0] == SPELL_AURA_MOD_CONFUSE)
                 return SPELL_MAGE_POLYMORPH;
 
+            if (spellInfo->SpellFamilyFlags & UI64LIT(0x00000400))
+                return SPELL_MAGE_INTELLECT;
+
             break;
         }
         case SPELLFAMILY_WARRIOR:
@@ -529,7 +532,6 @@ bool IsSingleFromSpellSpecificSpellRanksPerTarget(SpellSpecific spellSpec1,Spell
 {
     switch(spellSpec1)
     {
-        case SPELL_BLESSING:
         case SPELL_AURA:
         case SPELL_CURSE:
         case SPELL_ASPECT:
@@ -545,6 +547,7 @@ bool IsSingleFromSpellSpecificPerTarget(SpellSpecific spellSpec1,SpellSpecific s
 {
     switch(spellSpec1)
     {
+        case SPELL_BLESSING:
         case SPELL_SEAL:
         case SPELL_TRACKER:
         case SPELL_WARLOCK_ARMOR:
@@ -554,6 +557,7 @@ bool IsSingleFromSpellSpecificPerTarget(SpellSpecific spellSpec1,SpellSpecific s
         case SPELL_PRESENCE:
         case SPELL_WELL_FED:
         case SPELL_BLEED_DEBUFF:
+        case SPELL_MAGE_INTELLECT:
             return spellSpec1==spellSpec2;
         case SPELL_BATTLE_ELIXIR:
             return spellSpec2==SPELL_BATTLE_ELIXIR
