@@ -35,6 +35,10 @@ Mise à jour 2.0 :
     * Implantation du sort : Danse de l'ombre ( 51713 ).
     * Implantation du sort : Doigts de givre ( 44543 ).
     * Implantation du sort : Poigne de la mort ( 49576 ).
+    * Implantation du sort : Outrance meurtrière ( 58426 ).
+    * Implantation du sort : Glyphe de typhon ( 62135 ).
+    * Implantation du sort : Glyphe d'orage ( 62132 ).
+    * Implantation du sort : Glyphe de vague explosive ( 62126 ).
     * Implantation du sort : Faire détoner mana (Kel'Thuzad in Naxxramas) ( 27819 ).
     * Implantation du sort : Don du moissonneur ( 52479 ).
     * Implantation du sort : Mortelle floraison ( 29865 / 55053 ).
@@ -44,6 +48,16 @@ Mise à jour 2.0 :
     * Implantation du sort : Activer l'assemblage ( 62488 ).
     * Implantation du sort : Soif de sang ( 51662 ).
     * Implantation du sort : Berserk ( 50334 ).
+    * Implantation du sort : Fétiche salement fortiche ( 32580 ).
+    * Implantation du sort : Prise de sang ( 50252 ).
+    * Implantation du sort : Prise de givre ( 47724 ).
+    * Implantation du sort : Union impie ( 47703 ).
+    * Implantation du sort : The Denouncement: Commander Jordan On Death ( 48724 ).
+    * Implantation du sort : The Denouncement: Lead Cannoneer Zierhut On Deat ( 48726 ).
+    * Implantation du sort : The Denouncement: Blacksmith Goodman On Death ( 48728 ).
+    * Implantation du sort : The Denouncement: Stable Master Mercer On Death ( 48730 ).
+    * Implantation du sort : Naked Caravan Guard - Master Transform ( 45713 ).
+    * Implantation du sort : Prison de l'ombre ( 45923 ).
     * Implantation du sort : Item - Icecrown 25 Normal Healer Trinket 2 ( 71611 ).
     * Correction des montures volantes.
     * Correction de la commande .aura.
@@ -85,6 +99,7 @@ Mise à jour 2.0 :
     * Correction du sort : Synergie gangrenée ( 47230 ).
     * Correction du sort : Tranquillité ( 44203 ).
     * Correction du sort : Ouragan ( 42231 ).
+    * Correction du sort : Cercle démoniaque : Invocation ( 48018 ).
     * Suppression des restriction pour les maître de jeu.
     * Suppression des enchantements temporaire à chaque changement de spécialisations.
 
