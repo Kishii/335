@@ -1457,6 +1457,16 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, Aura
                     triggered_spell_id = 56161;
                     break;
                 }
+                // Item - Priest T10 Healer 2P Bonus
+                case 70770:
+                {
+                    if (GetTypeId() != TYPEID_PLAYER)
+                        return SPELL_AURA_PROC_FAILED;
+
+                    basepoints[0] = int32(damage * triggerAmount / 100 / 3); // 11% per 1 tick
+                    triggered_spell_id = 70772;
+                    break;
+                }
             }
             break;
         }
@@ -2015,6 +2025,21 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, Aura
                     target = this;
                     break;
                 }
+                // Item - Paladin T10 Holy 2P Bonus
+                case 70755:
+                {
+                    triggered_spell_id = 71166;
+                    break;
+                }
+                // Item - Paladin T10 Retribution 2P Bonus
+                case 70765:
+                {
+                    if (GetTypeId() != TYPEID_PLAYER)
+                        return SPELL_AURA_PROC_FAILED;
+
+                    triggered_spell_id = 70769;
+                    break;
+                }
                 // Anger Capacitor
                 case 71406:                                 // normal
                 case 71545:                                 // heroic
@@ -2039,6 +2064,54 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, Aura
                     else
                         triggered_spell_id = 71432;
 
+                    break;
+                }
+                case 71880:
+                // Heartpierce (Item - Icecrown 25 Normal Dagger Proc)
+                // ===================================================
+                // 71881 - Restores 120 mana for 10 sec. - Priest, Shaman, Paladin, Warlock, Hunter, Mage, Druid in human, moonkin, aqua, travel and in tree form.
+                // 71882 - Restores 4 energy for 10 sec. - Rogue, Druid in cat form.
+                // 71883 - Restores 2 rage for 10 sec. - Warrior, Druid in bear form.
+                // 71884 - Restores 8 runic power for 10 sec. - Death Knight
+                case 71892:
+                // Heartpierce (Item - Icecrown 25 Heroic Dagger Proc)
+                // ===================================================
+                // 71888 - Restores 120 mana for 12 sec. - Priest, Shaman, Paladin, Warlock, Hunter, Mage, Druid in human, moonkin, aqua, travel and in tree form.
+                // 71887 - Restores 4 energy for 12 sec. - Rogue, Druid in cat form.
+                // 71886 - Restores 2 rage for 12 sec. - Warrior, Druid in bear form.
+                // 71885 - Restores 8 runic power for 12 sec. - Death Knigh
+                {
+                    if(GetTypeId() != TYPEID_PLAYER)
+                        return SPELL_AURA_PROC_FAILED;
+ 
+                    // Select powertype defined buff
+                    switch (getPowerType())
+                    {
+                        case POWER_MANA:
+                        {
+                            triggered_spell_id = ((dummySpell->Id) == 71880) ? 71881 : 71888;
+                            break;
+                        }
+                        case POWER_ENERGY:
+                        {
+                            triggered_spell_id = ((dummySpell->Id) == 71880) ? 71882 : 71887;
+                            break;
+                        }
+                        case POWER_RAGE:
+                        {
+                            triggered_spell_id = ((dummySpell->Id) == 71880) ? 71883 : 71886;
+                            break;
+                        }
+                        case POWER_RUNIC_POWER:
+                        {
+                            triggered_spell_id = ((dummySpell->Id) == 71880) ? 71884 : 71885;
+                            break;
+                        }
+                        default:
+                            return SPELL_AURA_PROC_FAILED;
+                    }
+ 
+                    target = this;
                     break;
                 }
             }
@@ -3357,6 +3430,14 @@ SpellAuraProcResult Unit::HandleProcTriggerSpellAuraProc(Unit *pVictim, uint32 d
         // Maelstrom Weapon
         case 53817:
         {
+            // Item - Shaman T10 Enhancement 4P Bonus
+            // Calculate before roll_chance of ranks
+            if (Aura * dummy = GetDummyAura(70832))
+            {
+                if (SpellAuraHolder *aurHolder = GetSpellAuraHolder(53817))
+                if ((aurHolder->GetStackAmount() == aurHolder->GetSpellProto()->StackAmount) && roll_chance_i(dummy->GetBasePoints()))               
+                    CastSpell(this,70831,true,castItem,triggeredByAura);
+            }
             // have rank dependent proc chance, ignore too often cases
             // PPM = 2.5 * (rank of talent),
             uint32 rank = sSpellMgr.GetSpellRank(auraSpellInfo->Id);
