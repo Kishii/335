@@ -47,16 +47,24 @@ void WorldSession::HandleMoveWorldportAckOpcode()
     if (_player->GetVehicleKit())
         _player->GetVehicleKit()->RemoveAllPassengers();
 
-    // get the teleport destination
+    // get current and teleport destination
+    float currx,curry,currz;
+    uint32 currmap = GetPlayer()->GetMapId();
+    GetPlayer()->GetPosition(currx,curry,currz);
+
     WorldLocation &loc = GetPlayer()->GetTeleportDest();
 
     // possible errors in the coordinate validity check
     if(!MapManager::IsValidMapCoord(loc.mapid, loc.coord_x, loc.coord_y, loc.coord_z, loc.orientation))
     {
         sLog.outError("WorldSession::HandleMoveWorldportAckOpcode: player %s (%d) was teleported far to a not valid location. (map:%u, x:%f, y:%f, "
-            "z:%f) We port him to his homebind instead..", GetPlayer()->GetName(), GetPlayer()->GetGUIDLow(), loc.mapid, loc.coord_x, loc.coord_y, loc.coord_z);
-        // stop teleportation else we would try this again and again in LogoutPlayer...
-        GetPlayer()->SetSemaphoreTeleportFar(false);
+            "z:%f) Trying to port him to his previous place..", GetPlayer()->GetName(), GetPlayer()->GetGUIDLow(), loc.mapid, loc.coord_x, loc.coord_y, loc.coord_z);
+        // Teleport to previous place, if cannot be ported back TP to homebind place
+        if( !GetPlayer()->TeleportTo(currmap, currx,curry,currz, 0))
+        {
+            sLog.outError("WorldSession::HandleMoveWorldportAckOpcode: player %s cannot be ported to his previous place, teleporting him to his homebind place...", GetPlayer()->GetName());
+            GetPlayer()->TeleportToHomebind();
+        }
         // and teleport the player to a valid place
         GetPlayer()->TeleportToHomebind();
         return;

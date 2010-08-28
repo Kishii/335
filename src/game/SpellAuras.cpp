@@ -3895,6 +3895,26 @@ void Aura::HandleAuraModStun(bool apply, bool Real)
             return;
         }
     }
+
+    // Seduction (Succubus spell)
+    if (GetSpellProto()->Id == 6358)
+    {
+        Unit* pCaster = GetCaster();
+        if (!pCaster)
+            return;
+        
+        if (!apply)
+            pCaster->InterruptSpell(CURRENT_CHANNELED_SPELL, false);
+        else
+        {
+            if(pCaster->GetOwner() && target->isAlive())
+                if(pCaster->GetOwner()->HasAura(56250, EFFECT_INDEX_0))
+                {
+                    target->RemoveSpellsCausingAura(SPELL_AURA_PERIODIC_DAMAGE);
+                    target->RemoveSpellsCausingAura(SPELL_AURA_PERIODIC_DAMAGE_PERCENT);
+                }
+        }
+    }
 }
 
 void Aura::HandleModStealth(bool apply, bool Real)
@@ -4260,13 +4280,17 @@ void Aura::HandleModTaunt(bool apply, bool Real)
 /*********************************************************/
 /***                  MODIFY SPEED                     ***/
 /*********************************************************/
-void Aura::HandleAuraModIncreaseSpeed(bool /*apply*/, bool Real)
+void Aura::HandleAuraModIncreaseSpeed(bool apply, bool Real)
 {
     // all applied/removed only at real aura add/remove
     if(!Real)
         return;
 
     GetTarget()->UpdateSpeed(MOVE_RUN, true);
+
+    // Spirit Walk
+    if (apply && GetSpellProto()->Id == 58875)
+        GetTarget()->CastSpell(GetTarget(), 58876, true);
 }
 
 void Aura::HandleAuraModIncreaseMountedSpeed(bool apply, bool Real)
@@ -4421,6 +4445,17 @@ void Aura::HandleModMechanicImmunity(bool apply, bool /*Real*/)
     }
 
     target->ApplySpellImmune(GetId(),IMMUNITY_MECHANIC,misc,apply);
+
+    // Demonic Circle
+    if (GetSpellProto()->SpellFamilyName == SPELLFAMILY_WARLOCK && GetSpellProto()->SpellIconID == 3221)
+    {
+        if (target->GetTypeId() != TYPEID_PLAYER)
+            return;
+        if (apply)
+            if (GameObject* obj = target->GetGameObject(48018) )
+                if (target->IsWithinDist(obj,GetSpellMaxRange(sSpellRangeStore.LookupEntry(GetSpellProto()->rangeIndex))))
+                    ((Player*)target)->TeleportTo(obj->GetMapId(),obj->GetPositionX(),obj->GetPositionY(),obj->GetPositionZ(),obj->GetOrientation());
+    }
 
     // Bestial Wrath
     if (GetSpellProto()->SpellFamilyName == SPELLFAMILY_HUNTER && GetSpellProto()->SpellIconID == 1680)
@@ -5423,6 +5458,14 @@ void Aura::HandleAuraModIncreaseHealthPercent(bool apply, bool /*Real*/)
 void Aura::HandleAuraIncreaseBaseHealthPercent(bool apply, bool /*Real*/)
 {
     GetTarget()->HandleStatModifier(UNIT_MOD_HEALTH, BASE_PCT, float(m_modifier.m_amount), apply);
+
+    if(apply)
+    {
+        if(GetId() == 61254) //Will of Sartharion must set max health
+            m_target->SetHealth(m_target->GetMaxHealth());
+        else if(GetId() == 60430) // Molten Fury must increase current HP by gained value (200%)
+            m_target->SetHealth(m_target->GetHealth()*2);
+    }
 }
 
 /********************************/
