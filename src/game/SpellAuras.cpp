@@ -940,10 +940,6 @@ bool Aura::CanProcFrom(SpellEntry const *spell, uint32 EventProcEx, uint32 procE
     }
     else
     {
-        // Check family name
-        if (spell->SpellFamilyName != GetSpellProto()->SpellFamilyName)
-            return false;
-
         if (((uint64*)ptr)[0] & spell->SpellFamilyFlags)
             return true;
 
@@ -3983,7 +3979,7 @@ void Aura::HandleModStealth(bool apply, bool Real)
                     if (Aura* aura = target->GetAura(58427, EFFECT_INDEX_0))
                     {
                         aura->SetAuraMaxDuration(20*IN_MILLISECONDS);
-                        GetHolder()->RefreshHolder();
+                        aura->GetHolder()->RefreshHolder();
                     }
                 }
             }

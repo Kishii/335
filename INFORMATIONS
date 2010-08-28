@@ -44,6 +44,7 @@ Mise à jour 2.0 :
     * Implantation du sort : Activer l'assemblage ( 62488 ).
     * Implantation du sort : Soif de sang ( 51662 ).
     * Implantation du sort : Berserk ( 50334 ).
+    * Implantation du sort : Item - Icecrown 25 Normal Healer Trinket 2 ( 71611 ).
     * Correction des montures volantes.
     * Correction de la commande .aura.
     * Correction de la pénétration d'armure.
@@ -82,6 +83,8 @@ Mise à jour 2.0 :
     * Correction du sort : Traumatisme ( 46857 ).
     * Correction du sort : Mort soudaine ( 29724 ).
     * Correction du sort : Synergie gangrenée ( 47230 ).
+    * Correction du sort : Tranquillité ( 44203 ).
+    * Correction du sort : Ouragan ( 42231 ).
     * Suppression des restriction pour les maître de jeu.
     * Suppression des enchantements temporaire à chaque changement de spécialisations.
 

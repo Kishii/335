@@ -1686,7 +1686,7 @@ void Creature::SendAIReaction(AiReaction reactionType)
 {
     WorldPacket data(SMSG_AI_REACTION, 12);
 
-    data << uint64(GetGUID());
+    data << GetObjectGuid();
     data << uint32(reactionType);
 
     ((WorldObject*)this)->SendMessageToSet(&data, true);
@@ -1738,6 +1738,9 @@ bool Creature::CanAssistTo(const Unit* u, const Unit* enemy, bool checkfaction /
 
     // we don't need help from non-combatant ;)
     if (isCivilian())
+        return false;
+
+    if (HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_PASSIVE))
         return false;
 
     // skip fighting creature
