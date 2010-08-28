@@ -1866,22 +1866,6 @@ void Aura::TriggerSpell()
 
                 break;
             }
-            // Puissance terrestre
-            case 6474:
-            {
-                Unit *owner = target->GetOwner();
-
-                if (!owner)
-                    break;
-
-                if (Aura* aura = owner->GetAura(SPELL_AURA_DUMMY, SPELLFAMILY_SHAMAN, 2289, EFFECT_INDEX_0))
-                {
-                    if (roll_chance_i(aura->GetModifier()->m_amount))
-                        target->CastSpell(target, 59566, true, NULL, this);
-                }
-
-                break;
-            }
             case 16191:                                     // Mana Tide
             {
                 triggerTarget->CastCustomSpell(triggerTarget, trigger_spell_id, &m_modifier.m_amount, NULL, NULL, true, NULL, this);
@@ -5990,6 +5974,8 @@ void Aura::HandleShapeshiftBoosts(bool apply)
 
     if(apply)
     {
+        Player* player = target->GetTypeId() == TYPEID_PLAYER ? (Player*)target : NULL;
+
         if (spellId1)
         {
             if (player && player->HasSpellCooldown(spellId1))
@@ -6787,7 +6773,7 @@ void Aura::PeriodicTick()
 
             // calculate heal absorb and reduce healing
             uint32 absorb = 0;
-            pCaster->CalcHealAbsorb(m_target, GetSpellProto(), pdamage, abso
+            pCaster->CalcHealAbsorb(target, GetSpellProto(), pdamage, absorb);
 
             int32 gain = target->ModifyHealth(pdamage);
             SpellPeriodicAuraLogInfo pInfo(this, pdamage, (pdamage - uint32(gain)), absorb, 0, 0.0f, isCrit);
@@ -8085,8 +8071,8 @@ void SpellAuraHolder::_AddSpellAuraHolder()
             m_target->ModifyAuraState(AURA_STATE_ENRAGE, true);
 
         // Bleeding aura state
-        if (GetEffectMechanic(m_spellProto, m_effIndex) == MECHANIC_BLEED)
-		    m_target->ModifyAuraState(AURA_STATE_BLEEDING, true);
+        if (GetAllSpellMechanicMask(m_spellProto) & (1<<(MECHANIC_BLEED-1)))
+            m_target->ModifyAuraState(AURA_STATE_BLEEDING, true);
     }
 }
 
@@ -8142,21 +8128,19 @@ void SpellAuraHolder::_RemoveSpellAuraHolder()
             m_target->ModifyAuraState(AURA_STATE_ENRAGE, false);
 
         // Bleeding aura state
-        if (GetEffectMechanic(m_spellProto, m_effIndex) == MECHANIC_BLEED)
+        if (GetAllSpellMechanicMask(m_spellProto) & (1<<(MECHANIC_BLEED-1)))
         {
             // Look for another auras with same mechanic
             bool found = false;
-
-            Unit::AuraList const& mPerDmg = m_target->GetAurasByType(SPELL_AURA_PERIODIC_DAMAGE);
-            for(Unit::AuraList::const_iterator itr = mPerDmg.begin(); itr != mPerDmg.end(); ++itr)
-            {
-                if (GetEffectMechanic((*itr)->GetSpellProto(), (*itr)->GetEffIndex()) == MECHANIC_BLEED)
+           Unit::AuraList const& mPerDmg = m_target->GetAurasByType(SPELL_AURA_PERIODIC_DAMAGE);
+           for(Unit::AuraList::const_iterator itr = mPerDmg.begin(); itr != mPerDmg.end(); ++itr)
+           {
+                if (GetAllSpellMechanicMask((*itr)->GetSpellProto()) & (1<<(MECHANIC_BLEED-1)))
                 {
                     found = true;
                     break;
                 }
             }
-
             if (!found)
                 m_target->ModifyAuraState(AURA_STATE_BLEEDING, false);
         }
@@ -9207,5 +9191,5 @@ void Aura::HandleAuraLinked(bool apply, bool Real)
     if (apply)
         target->CastSpell(target, spellInfo, true, NULL, this);
     else
-        target->RemoveAurasByCasterSpell(linkedSpell, GetCasterGUID(), m_removeMode);
+        target->RemoveAurasByCasterSpell(linkedSpell, GetCasterGUID());
 }

@@ -4160,8 +4160,6 @@ void Spell::TakeReagents()
         return;
 
     Player* p_caster = (Player*)m_caster;
-    bool isScrollItem = false;
-    bool isVellumTarget = false;
     if (p_caster->CanNoReagentCast(m_spellInfo) )
         return;
 
@@ -5832,6 +5830,8 @@ SpellCastResult Spell::CheckItems()
         return SPELL_CAST_OK;
 
     Player* p_caster = (Player*)m_caster;
+    bool isScrollItem = false;
+    bool isVellumTarget = false;
 
     // cast item checks
     if(m_CastItem)

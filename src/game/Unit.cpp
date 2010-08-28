@@ -2446,16 +2446,16 @@ void Unit::CalculateAbsorbResistBlock(Unit *pCaster, SpellNonMeleeDamage *damage
     damageInfo->damage-= damageInfo->absorb + damageInfo->resist;
 }
 
-void Unit::CalcHealAbsorb(Unit *pVictim, SpellEntry const* spellProto, uint32 &HealAmount, uint32 &Absorb)
+void Unit::CalcHealAbsorb(Unit *pVictim, const SpellEntry *spellProto, uint32 &HealAmount, uint32 &Absorbed)
 {
     int32 finalAmount = int32(HealAmount);
     bool existExpired = false;
 
     // handle heal absorb effects
     AuraList const& healAbsorbAuras = pVictim->GetAurasByType(SPELL_AURA_SCHOOL_HEAL_ABSORB);
-    for (AuraList::const_iterator itr = healAbsorbAuras.begin(); itr != healAbsorbAuras.end() && finalAmount > 0; ++itr)
+    for (AuraList::const_iterator aura = healAbsorbAuras.begin(); aura != healAbsorbAuras.end() && finalAmount > 0; ++aura)
     {
-        Modifier* mod = (*itr)->GetModifier();
+        Modifier* mod = (*aura)->GetModifier();
 
         // check if affects this school
         if (!(mod->m_miscvalue & spellProto->SchoolMask))
@@ -2464,11 +2464,11 @@ void Unit::CalcHealAbsorb(Unit *pVictim, SpellEntry const* spellProto, uint32 &H
         // max amount that can be absorbed by this aura
         int32 currentAbsorb = mod->m_amount;
 
-        // found empty aura (impossible but..)
+       // found empty aura (impossible but..)
         if (currentAbsorb <= 0)
         {
             existExpired = true;
-            continue;
+           continue;
         }
 
         // can't absorb more than heal amount
@@ -2481,9 +2481,6 @@ void Unit::CalcHealAbsorb(Unit *pVictim, SpellEntry const* spellProto, uint32 &H
         // reduce aura amount
         mod->m_amount -= currentAbsorb;
 
-        if ((*itr)->DropAuraCharge())
-            mod->m_amount = 0;
-
         // check if aura needs to be removed
         if (mod->m_amount <= 0)
             existExpired = true;
@@ -2492,19 +2489,19 @@ void Unit::CalcHealAbsorb(Unit *pVictim, SpellEntry const* spellProto, uint32 &H
     // Remove all consumed absorb auras
     if (existExpired)
     {
-        for (AuraList::const_iterator itr = healAbsorbAuras.begin(); itr != healAbsorbAuras.end(); )
+        for (AuraList::const_iterator aura = healAbsorbAuras.begin(); aura != healAbsorbAuras.end(); )
         {
-            if ((*itr)->GetModifier()->m_amount <= 0)
+            if ((*aura)->GetModifier()->m_amount <= 0)
             {
-                pVictim->RemoveAurasDueToSpell((*itr)->GetId());
-                itr = healAbsorbAuras.begin();
+                pVictim->RemoveAurasDueToSpell((*aura)->GetId());
+                aura = healAbsorbAuras.begin();
             }
             else
-                ++itr;
+                ++aura;
         }
     }
 
-    Absorb = HealAmount - finalAmount;
+    Absorbed = HealAmount - finalAmount;
     HealAmount = finalAmount;
 }
 
@@ -4047,13 +4044,6 @@ bool Unit::AddSpellAuraHolder(SpellAuraHolder *holder)
 
                 // can be only single
                 RemoveSpellAuraHolder(foundHolder, AURA_REMOVE_BY_STACK);
-                break;
-            }
-            
-			// Judgements are always single
-            else if (GetSpellSpecific(Aur->GetId()) == SPELL_JUDGEMENT)
-            {
-			    RemoveAura(foundHolder,AURA_REMOVE_BY_STACK);
                 break;
             }
 
@@ -6117,7 +6107,7 @@ Unit* Unit::SelectMagnetTarget(Unit *victim, SpellEntry const *spellInfo)
     return victim;
 }
 
-void Unit::SendHealSpellLog(Unit *pVictim, uint32 SpellID, uint32 Damage, uint32 OverHeal, bool critical)
+void Unit::SendHealSpellLog(Unit *pVictim, uint32 SpellID, uint32 Damage, uint32 OverHeal, uint32 Absorb, bool critical)
 {
     // we guess size
     WorldPacket data(SMSG_SPELLHEALLOG, (8+8+4+4+4+4+1+1));
