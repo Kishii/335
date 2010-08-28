@@ -5469,9 +5469,9 @@ void Aura::HandleAuraIncreaseBaseHealthPercent(bool apply, bool /*Real*/)
     if(apply)
     {
         if(GetId() == 61254) //Will of Sartharion must set max health
-            m_target->SetHealth(m_target->GetMaxHealth());
+            GetTarget()->SetHealth(GetTarget()->GetMaxHealth());
         else if(GetId() == 60430) // Molten Fury must increase current HP by gained value (200%)
-            m_target->SetHealth(m_target->GetHealth()*2);
+            GetTarget()->SetHealth(GetTarget()->GetHealth()*2);
     }
 }
 
@@ -8558,6 +8558,22 @@ void SpellAuraHolder::HandleSpellSpecificBoosts(bool apply)
                 else
                     return;
                 break;
+            }
+
+            else if (m_spellProto->SpellFamilyFlags & 0x1LL && m_spellProto->SpellFamilyFlags2 & 0x8)
+            {
+                // Glyphe de boule de feu
+                if (Unit * caster = GetCaster())
+                    if (caster->HasAura(56368))
+                        m_target->RemoveAurasByCasterSpell(GetId(), caster->GetGUID());
+            }
+
+            else if (m_spellProto->SpellFamilyFlags & 0x20LL && GetSpellProto()->SpellVisual[0] == 13)
+            {
+                // Glyphe d'éclair de givre
+                if (Unit * caster = GetCaster())
+                    if (caster->HasAura(56370))
+                        m_target->RemoveAurasByCasterSpell(GetId(), caster->GetGUID());
             }
 
             switch(GetId())
