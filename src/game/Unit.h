@@ -1911,6 +1911,15 @@ class MANGOS_DLL_SPEC Unit : public WorldObject
         void AddPetAura(PetAura const* petSpell);
         void RemovePetAura(PetAura const* petSpell);
 
+        // redirect auras
+        void SetThreatRedirectionTarget(uint64 guid, uint32 pct)
+        {
+            m_misdirectionTargetGUID = guid;
+            m_ThreatRedirectionPercent = pct;
+        }
+        uint32 GetThreatRedirectionPercent() { return m_ThreatRedirectionPercent; }
+        Unit *GetMisdirectionTarget();
+
         // Movement info
         MovementInfo m_movementInfo;
 
@@ -2008,6 +2017,9 @@ class MANGOS_DLL_SPEC Unit : public WorldObject
         FollowerRefManager m_FollowingRefManager;
 
         ComboPointHolderSet m_ComboPointHolders;
+
+        uint32 m_ThreatRedirectionPercent;
+        uint64 m_misdirectionTargetGUID;
 
         GuardianPetList m_guardianPets;
 
