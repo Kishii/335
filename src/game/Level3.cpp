@@ -927,7 +927,7 @@ bool ChatHandler::HandleReloadVehicleSeatDataCommand(char* /*args*/)
     return true;
 }
 
-bool ChatHandler::HandleReloadSpellDisabledCommand(const char* /*arg*/)
+bool ChatHandler::HandleReloadSpellDisabledCommand(char* /*arg*/)
 {
     sLog.outString( "Re-Loading spell disabled table...");
 
