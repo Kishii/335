@@ -244,17 +244,12 @@ bool ReputationMgr::SetReputation(FactionEntry const* factionEntry, int32 standi
         for (SimpleFactionsList::const_iterator itr = flist->begin();itr != flist->end();++itr)
         {
             if (FactionEntry const *factionEntryCalc = sFactionStore.LookupEntry(*itr))
-            {
                 res = SetOneFactionReputation(factionEntryCalc, standing, incremental);
-
-                if (res)
-                {
-                    FactionStateList::iterator itrstate = m_factions.find(factionEntryCalc->reputationListID);
-                    if (itrstate != m_factions.end())
-                        SendState(&itrstate->second);
-                }
-            }
         }
+
+        if (factionEntry->ID == 1037 || factionEntry->ID == 1052)
+            res = SetOneFactionReputation(factionEntry, standing, incremental);
+
         return res;
     }
     else
@@ -280,11 +275,6 @@ bool ReputationMgr::SetReputation(FactionEntry const* factionEntry, int32 standi
                     }
                 }
             }
-
-            // now we can send it
-            FactionStateList::iterator itr = m_factions.find(factionEntry->reputationListID);
-            if (itr != m_factions.end())
-                SendState(&itr->second);
         }
 
         return res;
@@ -317,6 +307,7 @@ bool ReputationMgr::SetOneFactionReputation(FactionEntry const* factionEntry, in
         if(new_rank <= REP_HOSTILE)
             SetAtWar(&itr->second,true);
 
+        SendState(&itr->second);
         UpdateRankCounters(old_rank, new_rank);
 
         m_player->ReputationChanged(factionEntry);
@@ -355,7 +346,7 @@ void ReputationMgr::SetVisible(FactionEntry const *factionEntry)
 void ReputationMgr::SetVisible(FactionState* faction)
 {
     // always invisible or hidden faction can't be make visible
-    if(faction->Flags & (FACTION_FLAG_INVISIBLE_FORCED|FACTION_FLAG_HIDDEN))
+    if(faction->Flags & (FACTION_FLAG_INVISIBLE_FORCED|FACTION_FLAG_HIDDEN) & !(faction->Flags & FACTION_FLAG_UNK1))
         return;
 
     // already set
