@@ -861,6 +861,12 @@ bool IsPositiveEffect(uint32 spellId, SpellEffectIndex effIndex)
     if (!spellProto)
         return false;
 
+    if (spellId == 32375 || spellId == 32592) // mass dispell
+    return true;
+
+    if (spellId == 527 || spellId == 988) // dispell magic
+    return false; 
+		
     return IsPositiveEffect(spellProto, effIndex);
 }
 
