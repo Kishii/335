@@ -6525,10 +6525,11 @@ uint32 Unit::SpellDamageBonusDone(Unit *pVictim, SpellEntry const *spellProto, u
                 break;
             }
             // Rune strike
-            if (dummySpell->Id == 56817)
+            else if (auraSpellInfo->Id == 56816)
             {
-                if (procSpell && procSpell->Id != 56815)
-                    return false;
+                if( Aura * pAura = this->GetAura(56816, EFFECT_INDEX_0))
+                    pAura->SendFakeAuraUpdate(56817, false);
+                    return true;
             }
             break;
         }
