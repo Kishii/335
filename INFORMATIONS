@@ -17,6 +17,7 @@ Mise à jour 2.0 :
     * Implantation de l'honneur des kills stats en champs de batailles.
     * Implantation des parchemins Vellums.
     * Implantation du repaire d'Onyxia ( INSTANCE ).
+    * Implantation d'un système qui enregistre le GUID du personnage et l'ID de l'account pour chaque de spawn ( Gameobject + Creature ).
     * Implantation du sort : Tête de taureau ( 53490 ).
     * Implantation du sort : Série meurtrière ( 51690 ).
     * Implantation du sort : Chevaliers inflexibles ( 38164 ).
@@ -55,31 +56,20 @@ Mise à jour 2.0 :
     * Implantation du sort : Activer l'assemblage ( 62488 ).
     * Implantation du sort : Soif de sang ( 51662 ).
     * Implantation du sort : Berserk ( 50334 ).
-    * Implantation du sort : Fétiche salement fortiche ( 32580 ).
     * Implantation du sort : Prise de sang ( 50252 ).
     * Implantation du sort : Prise de givre ( 47724 ).
     * Implantation du sort : Union impie ( 47703 ).
-    * Implantation du sort : The Denouncement: Commander Jordan On Death ( 48724 ).
-    * Implantation du sort : The Denouncement: Lead Cannoneer Zierhut On Deat ( 48726 ).
-    * Implantation du sort : The Denouncement: Blacksmith Goodman On Death ( 48728 ).
-    * Implantation du sort : The Denouncement: Stable Master Mercer On Death ( 48730 ).
     * Implantation du sort : Naked Caravan Guard - Master Transform ( 45713 ).
     * Implantation du sort : Prison de l'ombre ( 45923 ).
     * Implantation du sort : Quête suicidaire ( 14050 ).
     * Implantation du sort : Invocation d'Esprit ( 38173 ).
     * Implantation du sort : Largage du modulateur néantin ( 33655 ).
     * Implantation du sort : Aspect de Neptulon ( 21332 ).
-    * Implantation du sort : Détruire une épave de machine volante ( 46171 ).
-    * Implantation du sort : Placer le totem de la sage Aeire ( 45653 ).
     * Implantation du sort : Lancer les explosifs de la KapitalRisk ( 53145 ).
-    * Implantation du sort : Didjeridou de contemplation ( 53038 ).
-    * Implantation du sort : Bombe de Rochecombe ( 56275 ).
     * Implantation du sort : Signal de l'Alliance ( 45958 ).
     * Implantation du sort : Le Tournevis ultrasonique ( 46023 ).
     * Implantation du sort : Effrayer un mustang des hautes-terres ( 49319 ).
     * Implantation du sort : Bombes de poliorcète ( 48345 ).
-    * Implantation du sort : Fumigène du sergent ( 49634 ).
-    * Implantation du sort : Fumigène du brave ( 49625 ).
     * Implantation du sort : Ecorce des marcheurs ( 43404 ).
     * Implantation du sort : Ecorce des marcheurs ( 47530 ).
     * Implantation du sort : Item - Icecrown 25 Normal Healer Trinket 2 ( 71611 ).
