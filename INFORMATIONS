@@ -124,6 +124,7 @@ Mise à jour 2.0 :
     * Implantation du sort : Item - Paladin T10 Holy 2P Bonus ( 70755 ).
     * Implantation du sort : Item - Priest T10 Healer 2P Bonus ( 70770 ).
     * Implantation du sort : Totem de griffes de pierre ( 58591 ).
+    * Implantation du sort : Protection du Neant ( 30299 ). 
     * Correction des montures volantes.
     * Correction de la commande .aura.
     * Correction de la pénétration d'armure.
@@ -161,6 +162,8 @@ Mise à jour 2.0 :
     * Correction du sort : Mutilation ( 48566 ).
     * Correction du sort : Traumatisme ( 46857 ).
     * Correction du sort : Mort soudaine ( 29724 ).
+    * Correction du sort : Mort soudaine ( 52437 ).
+    * Correction du sort : Gout du sang ( 60503 ).
     * Correction du sort : Synergie gangrenée ( 47230 ).
     * Correction du sort : Tranquillité ( 44203 ).
     * Correction du sort : Ouragan ( 42231 ).
