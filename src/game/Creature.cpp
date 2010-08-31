@@ -1068,7 +1068,7 @@ void Creature::SaveToDB(uint32 mapid, uint8 spawnMask, uint32 phaseMask)
         << (m_isDeadByDefault ? 1 : 0) << ","               //is_dead
         << GetDefaultMovementType() << ","                  //default movement generator type
         << uint64(GetOwnerGUID()) << ","
-		<< AccID << ")";
+        << AccID << ")";
 
     WorldDatabase.PExecuteLog("%s", ss.str().c_str());
 

@@ -555,7 +555,7 @@ void GameObject::SaveToDB(uint32 mapid, uint8 spawnMask, uint32 phaseMask)
         << uint32(GetGoAnimProgress()) << ", "
         << uint32(GetGoState()) << ", "
         << uint64(GetOwnerGUID()) << ", "
-		<< AccID << ")";
+        << AccID << ")";
 		
     WorldDatabase.BeginTransaction();
     WorldDatabase.PExecuteLog("DELETE FROM gameobject WHERE guid = '%u'", m_DBTableGuid);

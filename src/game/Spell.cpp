@@ -2992,7 +2992,7 @@ void Spell::cast(bool skipCheck)
                 AddTriggeredSpell(60089);
             // Berserk (Bear Mangle part)
             else if (m_spellInfo->Id == 50334)
-                AddTriggeredSpell(58923);
+                AddTriggeredSpell(58923); 
             break;
         }
         case SPELLFAMILY_ROGUE:
