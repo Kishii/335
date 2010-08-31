@@ -4218,7 +4218,10 @@ SpellCastResult Spell::CheckOrTakeRunePower(bool take)
                 continue;
 
             if (take)
+            {
                 plr->SetRuneCooldown(i, RUNE_COOLDOWN);         // 5*2=10 sec
+                plr->ClearConvertedBy(i);
+            }
 
             --runeCost[rune];
         }
