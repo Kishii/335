@@ -4278,6 +4278,9 @@ void Spell::DoSummon(SpellEffectIndex eff_idx)
             spawnCreature->Relocate(m_targets.m_destX, m_targets.m_destY, m_targets.m_destZ, -m_caster->GetOrientation());
         }
 
+        if (pet_entry == 37994) // Mage: Water Elemental from Glyph
+            duration = DAY*IN_MILLISECONDS;
+
         // set timer for unsummon
         if (duration > 0)
             spawnCreature->SetDuration(duration);

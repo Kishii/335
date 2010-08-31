@@ -137,6 +137,7 @@ Mise à jour 2.0 :
     * Implantation du sort : Ardent defenseur ( 31850 ).
     * Implantation du sort : Vigilance ( 50725 ).
     * Implantation du sort : Synergie gangrenée ( 47230 ).
+    * Implantation du sort : Glyphe d'esprit farouche ( 63271 ).
     * Correction des montures volantes.
     * Correction de la commande .aura.
     * Correction de la pénétration d'armure.
@@ -193,6 +194,7 @@ Mise à jour 2.0 :
     * Correction du sort : Ombreflamme ( 47897 ).
     * Correction du sort : Typhon ( 61391 ).
     * Correction du sort : Marque de sang ( 49005 ).
+    * Correction du sort : Guide de la lumière ( 53651 ).
     * Suppression des restriction pour les maître de jeu.
     * Suppression des enchantements temporaire à chaque changement de spécialisations.
 
