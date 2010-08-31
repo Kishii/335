@@ -1633,7 +1633,31 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, Aura
                 basepoints[0] = triggerAmount * damage / 100;
                 break;
             }
-            break;
+            // King of the Jungle
+            else if (dummySpell->SpellIconID == 2850)
+            {
+                if (!procSpell)
+                    return SPELL_AURA_PROC_FAILED;
+
+                // Tiger's Fury
+                if (procSpell->SpellFamilyFlags2 & 0x800 && effIndex == 1)
+                {
+                    basepoints0 = triggerAmount;
+                    triggered_spell_id = 51178;
+                    target = this;
+                    break;
+                }
+                // Enrage
+                if (procSpell->Id == 5229 && effIndex == 0)
+                {
+                    basepoints0 = triggerAmount;
+                    triggered_spell_id = 51185;
+                    target = this;
+                    break;
+                }
+                return SPELL_AURA_PROC_FAILED;
+             }
+             break;
         }
         case SPELLFAMILY_ROGUE:
         {
