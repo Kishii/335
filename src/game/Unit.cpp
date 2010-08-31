@@ -5998,8 +5998,9 @@ float Unit::GetCombatDistance( const Unit* target ) const
 void Unit::SetPet(Pet* pet)
 {
     SetPetGUID(pet ? pet->GetGUID() : 0);
-    {
+
     if(pet && GetTypeId() == TYPEID_PLAYER)
+    {
         ((Player*)this)->SendPetGUIDs();
         // set infinite cooldown for summon spell
         SpellEntry const *spellInfo = sSpellStore.LookupEntry(pet->GetUInt32Value(UNIT_CREATED_BY_SPELL));
