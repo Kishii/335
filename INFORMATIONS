@@ -18,6 +18,7 @@ Mise à jour 2.0 :
     * Implantation des parchemins Vellums.
     * Implantation du repaire d'Onyxia ( INSTANCE ).
     * Implantation d'un système qui enregistre le GUID du personnage et l'ID de l'account pour chaque de spawn ( Gameobject + Creature ).
+    * Implantation du temps du Joug sur la map.
     * Implantation du sort : Tête de taureau ( 53490 ).
     * Implantation du sort : Série meurtrière ( 51690 ).
     * Implantation du sort : Chevaliers inflexibles ( 38164 ).
