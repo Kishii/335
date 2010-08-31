@@ -5601,15 +5601,6 @@ void Spell::EffectWeaponDmg(SpellEffectIndex eff_idx)
             {
                 totalDamagePercentMod *= 1.2f;
             }
-            // Rune strike
-            if( m_spellInfo->SpellIconID == 3007)
-            {
-                int32 count = CalculateDamage(EFFECT_INDEX_2, unitTarget);
-                spell_bonus += int32(count * m_caster->GetTotalAttackPowerValue(BASE_ATTACK) / 100.0f);
-
-                if( Aura * pAura = m_caster->GetAura(56816, EFFECT_INDEX_0))
-                    pAura->SendFakeAuraUpdate(56817, true);
-            }
             break;
         }
     }
@@ -6620,29 +6611,27 @@ void Spell::EffectScriptEffect(SpellEffectIndex eff_idx)
                             return;
                     }
 
-                    if (Unit *owner = m_caster->GetOwner())
+                    if (SpellAuraHolder* chargesholder = m_caster->GetSpellAuraHolder(59907))
                     {
-
-                        if (const SpellEntry *pSpell = sSpellStore.LookupEntry(spellID))
+                        if (Unit *owner = m_caster->GetOwner())
                         {
+                            if (const SpellEntry *pSpell = sSpellStore.LookupEntry(spellID))
+                            {
+                                damage = owner->SpellHealingBonusDone(unitTarget, pSpell, pSpell->EffectBasePoints[EFFECT_INDEX_0], DOT);
+                                damage = unitTarget->SpellHealingBonusTaken(owner, pSpell, damage, DOT);
 
-                        damage = owner->SpellHealingBonusDone(unitTarget, pSpell, pSpell->EffectBasePoints[EFFECT_INDEX_0], DOT);
-                        damage = unitTarget->SpellHealingBonusTaken(owner, pSpell, damage, DOT);
-
-                        if (Aura *dummy = owner->GetDummyAura(55673))
-                            damage += damage * dummy->GetModifier()->m_amount /100.0f;
+                                if (Aura *dummy = owner->GetDummyAura(55673))
+                                    damage += damage * dummy->GetModifier()->m_amount /100.0f;
+                            }
                         }
-                    }
 
-                    Aura* chargesaura = m_caster->GetAura(59907,EFFECT_INDEX_0);
-                    if (chargesaura && chargesaura->GetAuraCharges() >= 1)
-                    {
-                        chargesaura->SetAuraCharges(chargesaura->GetAuraCharges() - 1);
-                        m_caster->CastCustomSpell(unitTarget, spellID, &damage, NULL, NULL, true, NULL, NULL, m_originalCasterGUID);
+                        uint8 charges = chargesholder->GetAuraCharges();
+
+                        if (charges >= 1)
+                            m_caster->CastCustomSpell(unitTarget, spellID, &damage, NULL, NULL, true, NULL, NULL, m_originalCasterGUID);
+                        if (charges <= 1)
+                            ((TemporarySummon*)m_caster)->UnSummon();
                     }
-                    else
-                       ((TemporarySummon*)m_caster)->UnSummon();
-                    return;
                 }
                 // Glyph of Starfire
                 case 54846:
@@ -6658,7 +6647,7 @@ void Spell::EffectScriptEffect(SpellEffectIndex eff_idx)
                         {
                             aurEff->SetAuraDuration(uint32(aurEff->GetAuraDuration()+3000));
                             aurEff->SetAuraMaxDuration(countMin+3000);
-                            aurEff->SendAuraUpdate(false);
+                            aurEff->GetHolder()->SendAuraUpdate(false);
                         }
                     }
                     return;

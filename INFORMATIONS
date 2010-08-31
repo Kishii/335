@@ -144,6 +144,7 @@ Mise à jour 2.0 :
     * Correction des aura de d'invisibilité.
     * Correction d'exploit de bug en arènes.
     * Correction des displayID des gemmes et enchantements héroïc.
+    * Correction de la résilience.
     * Correction du sort : Repentir ( 20066 ) enlève maintenant Vengeance vertueuse ( 61840 ).
     * Correction du sort : Maléfice ( 51514 ).
     * Correction du sort : Piqure ( 56626 ).
