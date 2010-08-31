@@ -1827,6 +1827,10 @@ bool SpellMgr::IsNoStackSpellDueToSpell(uint32 spellId_1, uint32 spellId_2) cons
                         if( spellInfo_1->SpellIconID == 225 && spellInfo_2->SpellIconID == 225)
                             return false;
             
+                    // Rejuvenation and Forethought Talisman (item 40258)
+                    if(spellInfo_1->Id == 60530 && spellInfo_2->SpellIconID == 64)
+                        return false;
+
                     //Mirror image frostbolt and mage frostbolt
                     if( spellInfo_2->SpellIconID == 188 && spellInfo_1->Id == 59638 )
                         return false;
@@ -1861,6 +1865,10 @@ bool SpellMgr::IsNoStackSpellDueToSpell(uint32 spellId_1, uint32 spellId_2) cons
                     if( spellInfo_2->SpellFamilyName == SPELLFAMILY_MAGE )
                         if( spellInfo_1->SpellIconID == 225 && spellInfo_2->SpellIconID == 225)
                             return false;
+							
+                    // Rejuvenation and Forethought Talisman (item 40258)
+                   if(spellInfo_2->Id == 60530 && spellInfo_1->SpellIconID == 64)
+                        return false;
                     break;
                 }
                 case SPELLFAMILY_ROGUE:
