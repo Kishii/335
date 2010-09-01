@@ -7914,6 +7914,10 @@ void Aura::HandleIgnoreUnitState(bool apply, bool Real)
     if(target->GetTypeId() != TYPEID_PLAYER || !Real)
         return;
 
+    // Mastodonte
+    if (GetId() == 64976 && apply)
+        GetHolder()->SetAuraFlags(19);
+
     // for alowing charge/intercept/intervene in different stances
     if (GetId() == 57499 && apply)
         GetHolder()->SetAuraFlags(19);
