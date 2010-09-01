@@ -6883,6 +6883,16 @@ void Spell::EffectScriptEffect(SpellEffectIndex eff_idx)
                     unitTarget->CastSpell(unitTarget, 69201, true);
                     return;
                 }
+                case 65917:                                 // Magic Rooster 
+                { 
+                    if (!unitTarget || unitTarget->GetTypeId() != TYPEID_PLAYER) 
+                        return; 
+ 
+                    // Prevent stacking of mounts 
+                    unitTarget->RemoveSpellsCausingAura(SPELL_AURA_MOUNTED); 
+                    unitTarget->CastSpell(unitTarget, 64380, true); 
+                    return; 
+                }
                 case 66477:                                 // Bountiful Feast
                 {
                     if (!unitTarget)
