@@ -173,6 +173,16 @@ Mise à jour 2.0 :
     * Implantation du sort : Glyphe de nova de givre ( 56376 ).
     * Implantation du sort : Glyphe de maléfice ( 63291 ).
     * Implantation du sort : Vie benie ( 31828 ).
+    * Implantation du sort : Hymne l'espoir ( 64904 ).
+    * Implantation du sort : Hymne divin ( 64844 ).
+    * Implantation du sort : Fivre de givre ( 55095 ).
+    * Implantation du sort : Peste de sang ( 55078 ).
+    * Implantation du sort : Peste d'ébne ( 51735 (Rang 1) ).
+    * Implantation du sort : Peste d'ébne ( 51734 (Rang 2) ).
+    * Implantation du sort : Peste d'ébne ( 51726 (Rang 3) ).
+    * Implantation du sort : Fivre de la crypte ( 50510 (Rang 1) ).
+    * Implantation du sort : Fivre de la crypte ( 50509 (Rang 2) ).
+    * Implantation du sort : Fivre de la crypte ( 50508 (Rang 3) ).
     * Correction des montures volantes.
     * Correction de la commande .aura.
     * Correction de la pénétration d'armure.
@@ -232,6 +242,7 @@ Mise à jour 2.0 :
     * Correction du sort : Guide de la lumière ( 53651 ).
     * Correction du sort : Egide ( 67631 ).
     * Correction du sort : Bouclier sacrée ( 27179 ).
+    * Correction du sort : Tempete divine ( 54171  ).
     * Suppression des restriction pour les maître de jeu.
     * Suppression des enchantements temporaire à chaque changement de spécialisations.
 

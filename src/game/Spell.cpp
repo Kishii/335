@@ -2043,6 +2043,9 @@ void Spell::SetTargetMap(SpellEffectIndex effIndex, uint32 targetMode, UnitList&
         case TARGET_ALL_FRIENDLY_UNITS_AROUND_CASTER:
             switch (m_spellInfo->Id)
             {
+                case 54171:                                     // Divine Storm
+                    FillRaidOrPartyHealthPriorityTargets(targetUnitMap, m_caster, m_caster, radius, 3, true, false, true);
+                    break;
                 case 56153:                                 // Guardian Aura - Ahn'Kahet
                     FillAreaTargets(targetUnitMap, m_targets.m_destX, m_targets.m_destY, radius, PUSH_SELF_CENTER, SPELL_TARGETS_FRIENDLY);
                     targetUnitMap.remove(m_caster);
@@ -2896,6 +2899,7 @@ void Spell::cast(bool skipCheck)
         else
             sLog.outError("Spell %u too deep in cast chain for cast. Cast not allowed for prevent overflow stack crash.", m_spellInfo->Id);
 
+        if (!(m_spellInfo->Id == 51735 || m_spellInfo->Id == 51734 || m_spellInfo->Id == 51726))  // Exception for Ebon Plague - HACK to don't show problem at client-side
         SendCastResult(SPELL_FAILED_ERROR);
         finish(false);
         SetExecutedCurrently(false);
@@ -3101,6 +3105,30 @@ void Spell::cast(bool skipCheck)
             // Chains of Ice
             if (m_spellInfo->Id == 45524)
                 AddTriggeredSpell(55095);                   // Frost Fever
+
+            // Icy touch or Plague Strike - apply Crypt Fever / Ebon Plague disease
+            else if (m_spellInfo->SpellFamilyFlags & UI64LIT(0x400080000000000))
+            {
+                if (m_caster->HasSpell(51161))              // Ebon Plague (Rank 3)
+                    AddTriggeredSpell(51735);
+                else if (m_caster->HasSpell(51160))         // Ebon Plague (Rank 2)
+                    AddTriggeredSpell(51734);
+                else if (m_caster->HasSpell(51099))         // Ebon Plague (Rank 1)
+                    AddTriggeredSpell(51726);
+                else if (m_caster->HasSpell(49632))         // Crypt Fever (Rank 3)
+                    AddTriggeredSpell(50510);
+                else if (m_caster->HasSpell(49631))         // Crypt Fever (Rank 2)
+                    AddTriggeredSpell(50509);
+                else if (m_caster->HasSpell(49032))         // Crypt Fever (Rank 1)
+                    AddTriggeredSpell(50508);
+            }
+            // Empower Rune Weapon
+            else if (m_spellInfo->Id == 47568 && m_caster->GetTypeId() == TYPEID_PLAYER)
+            {
+                Player* plr = ((Player*)m_caster);
+                for (uint32 i = 0; i < MAX_RUNES; ++i)
+                    plr->SetRuneCooldown(i, 0);
+            }
             break;
         }
         default:
