@@ -958,7 +958,7 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, Aura
                 case 71892:
                 {
                     if(GetTypeId() != TYPEID_PLAYER)
-                        return false;
+                        return SPELL_AURA_PROC_OK;
 
                     // Select powertype defined buff
                     switch (getPowerType())
@@ -984,7 +984,7 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, Aura
                             break;
                         }
                         default:
-                            return false;
+                            return SPELL_AURA_PROC_OK;
                     }
 
                     target = this;
@@ -1785,7 +1785,7 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, Aura
                 // Tiger's Fury
                 if (procSpell->SpellFamilyFlags2 & 0x800 && effIndex == 1)
                 {
-                    basepoints0 = triggerAmount;
+                    basepoints[0] = triggerAmount;
                     triggered_spell_id = 51178;
                     target = this;
                     break;
@@ -1793,7 +1793,7 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, Aura
                 // Enrage
                 if (procSpell->Id == 5229 && effIndex == 0)
                 {
-                    basepoints0 = triggerAmount;
+                    basepoints[0] = triggerAmount;
                     triggered_spell_id = 51185;
                     target = this;
                     break;
@@ -4001,5 +4001,83 @@ SpellAuraProcResult Unit::HandleModDamagePercentDoneAuraProc(Unit* /*pVictim*/, 
         // prevent proc from self(spell that triggered this aura)
         return SPELL_AURA_PROC_FAILED;
 
+    return SPELL_AURA_PROC_OK;
+}
+
+SpellAuraProcResult Unit::HandlePeriodicDummyAuraProc(Unit* /*pVictim*/, uint32 /*damage*/, Aura* triggeredByAura, SpellEntry const *procSpell, uint32 /*procFlag*/, uint32 /*procEx*/, uint32 /*cooldown*/)
+{
+    if (!triggeredByAura)
+        return SPELL_AURA_PROC_FAILED;
+
+    SpellEntry const *spellProto = triggeredByAura->GetSpellProto();
+    if (!spellProto)
+        return SPELL_AURA_PROC_FAILED;
+
+    switch (spellProto->SpellFamilyName)
+    {
+        case SPELLFAMILY_DEATHKNIGHT:
+        {
+            switch (spellProto->SpellIconID)
+            {
+                // Reaping
+                // Death Rune Mastery
+                // Blood of the North
+                case 22:
+                case 2622:
+                case 3041:
+                {
+                    if(!procSpell)
+                        return SPELL_AURA_PROC_FAILED;
+
+                    if (getClass() != CLASS_DEATH_KNIGHT)
+                        return SPELL_AURA_PROC_FAILED;
+
+                    Player * plr = GetTypeId() == TYPEID_PLAYER? ((Player*)this) : NULL;
+                    if (!plr)
+                        return SPELL_AURA_PROC_FAILED;
+
+                    //get spell rune cost
+                    SpellRuneCostEntry const *runeCost = sSpellRuneCostStore.LookupEntry(procSpell->runeCostID);
+                    if (!runeCost)
+                        return SPELL_AURA_PROC_FAILED;
+
+                    //convert runes to death
+                    for (uint32 i = 0; i < NUM_RUNE_TYPES -1/*don't count death rune*/; ++i)
+                    {
+                        uint32 remainingCost = runeCost->RuneCost[i];
+
+                        while(remainingCost)
+                        {
+                            int32  convertedRuneCooldown = -1;
+                            uint32 convertedRune = i;
+                            for(uint32 j = 0; j < MAX_RUNES; ++j)
+                            {
+                                // convert only valid runes
+                                if (RuneType(i) != plr->GetCurrentRune(j) && 
+                                    RuneType(i) != plr->GetBaseRune(j))
+                                    continue;
+
+                                // select rune with longest cooldown
+                                if (convertedRuneCooldown < plr->GetRuneCooldown(j))
+                                {
+                                    convertedRuneCooldown = int32(plr->GetRuneCooldown(j));
+                                    convertedRune = j;
+                                }
+                            }
+                            if (convertedRuneCooldown >= 0)
+                                plr->ConvertRune(convertedRune, RUNE_DEATH);
+                            --remainingCost;
+                        }
+                    }
+                    return SPELL_AURA_PROC_OK;
+                }
+                default:
+                    break;
+            }
+            break;
+        }
+        default:
+            break;
+    }
     return SPELL_AURA_PROC_OK;
 }

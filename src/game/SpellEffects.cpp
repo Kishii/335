@@ -3043,6 +3043,13 @@ void Spell::EffectTriggerSpell(SpellEffectIndex effIndex)
                 pet->CastSpell(pet, 28305, true);
             return;
         }
+        // Glyph of Mirror Image
+        case 58832:
+        {
+            if (m_caster->HasAura(63093))
+                m_caster->CastSpell(m_caster, 65047, true); // Mirror Image
+            break;
+        }
     }
 
     // normal case
@@ -3378,7 +3385,7 @@ void Spell::EffectApplyAura(SpellEffectIndex eff_idx)
     }
 
     // Mixology: increase duration and effect of elixirs and flasks
-    if (Aur->GetSpellProto()->SpellClass == SPELLFAMILY_POTION &&
+    if (Aur->GetSpellProto()->SpellFamilyName == SPELLFAMILY_POTION &&
         caster->GetTypeId() == TYPEID_PLAYER && caster->HasAura(53042))
     {
         SpellSpecific spellSpec = GetSpellSpecific(Aur->GetId());
