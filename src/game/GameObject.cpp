@@ -527,13 +527,6 @@ void GameObject::SaveToDB(uint32 mapid, uint8 spawnMask, uint32 phaseMask)
     data.animprogress = GetGoAnimProgress();
     data.go_state = GetGoState();
     data.spawnMask = spawnMask;
-
-    uint32 AccID = 0;
-    // Recherche du compte
-    QueryResult *ACCOUNTID;
-    ACCOUNTID = CharacterDatabase.PQuery("SELECT account FROM characters WHERE guid = '%u'", GetOwnerGUID());
-	    AccID = ACCOUNTID->Fetch()->GetUInt16();
-	    delete ACCOUNTID;
 	
     // updated in DB
     std::ostringstream ss;
@@ -553,9 +546,7 @@ void GameObject::SaveToDB(uint32 mapid, uint8 spawnMask, uint32 phaseMask)
         << GetFloatValue(GAMEOBJECT_PARENTROTATION+3) << ", "
         << m_respawnDelayTime << ", "
         << uint32(GetGoAnimProgress()) << ", "
-        << uint32(GetGoState()) << ", "
-        << uint64(GetOwnerGUID()) << ", "
-        << AccID << ")";
+        << uint32(GetGoState()) << ")";
 		
     WorldDatabase.BeginTransaction();
     WorldDatabase.PExecuteLog("DELETE FROM gameobject WHERE guid = '%u'", m_DBTableGuid);

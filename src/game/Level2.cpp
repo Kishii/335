@@ -1097,8 +1097,6 @@ bool ChatHandler::HandleGameObjectAddCommand(char* args)
     if (spawntimeSecs)
         pGameObj->SetRespawnTime(spawntimeSecs);
 
-    pGameObj->SetOwnerGUID(chr->GetGUID());
-
     // fill the gameobject data and save to the db
     pGameObj->SaveToDB(map->GetId(), (1 << map->GetSpawnMode()),chr->GetPhaseMaskForSpawn());
 
@@ -1595,8 +1593,6 @@ bool ChatHandler::HandleNpcAddCommand(char* args)
         delete pCreature;
         return false;
     }
-
-    pCreature->SetOwnerGUID(chr->GetGUID());
 
     pCreature->SaveToDB(map->GetId(), (1 << map->GetSpawnMode()), chr->GetPhaseMaskForSpawn());
 

@@ -1032,13 +1032,6 @@ void Creature::SaveToDB(uint32 mapid, uint8 spawnMask, uint32 phaseMask)
     data.movementType = !m_respawnradius && GetDefaultMovementType()==RANDOM_MOTION_TYPE
         ? IDLE_MOTION_TYPE : GetDefaultMovementType();
     data.spawnMask = spawnMask;
-
-    uint32 AccID = 0;
-    // Recherche du compte
-    QueryResult *ACCOUNTID;
-    ACCOUNTID = CharacterDatabase.PQuery("SELECT account FROM characters WHERE guid = '%u'", GetOwnerGUID());
-	    AccID = ACCOUNTID->Fetch()->GetUInt16();
-	    delete ACCOUNTID;
 	
     // updated in DB
     WorldDatabase.BeginTransaction();
@@ -1064,9 +1057,7 @@ void Creature::SaveToDB(uint32 mapid, uint8 spawnMask, uint32 phaseMask)
         << GetHealth() << ","                               //curhealth
         << GetPower(POWER_MANA) << ","                      //curmana
         << (m_isDeadByDefault ? 1 : 0) << ","               //is_dead
-        << GetDefaultMovementType() << ","                  //default movement generator type
-        << uint64(GetOwnerGUID()) << ","
-        << AccID << ")";
+        << GetDefaultMovementType() << ")";                 //default movement generator type
 
     WorldDatabase.PExecuteLog("%s", ss.str().c_str());
 
