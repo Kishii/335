@@ -5,6 +5,7 @@ Mise à jour 2.1 :
     * Implantation de la fonction : CMSG_PET_STOP_ATTACK.
     * Implantation du sort : Détection des pièges ( 2836 ).
     * Implantation du sort : Charge étourdissante ( 7922 ).
+    * Implantation du sort : Barrage de projectiles ( 54490 ).
     * Correction du sort : Mastodonte ( 64976 ).
     * Correction du sort : Roi de la jungle ( 51185 ).
     * Correction du sort : Rage de Vaillefendre ( 50117 ).
