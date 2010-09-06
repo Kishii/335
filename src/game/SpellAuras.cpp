@@ -6220,6 +6220,23 @@ void Aura::HandleShapeshiftBoosts(bool apply)
             if (form == FORM_CAT && target->HasAura(52610))
                 target->CastSpell(target, 62071, true);
 
+            // Survival of the Fittest (Armor part)
+            if (form == FORM_BEAR || form == FORM_DIREBEAR)
+            {
+                Unit::AuraList const& modAuras = target->GetAurasByType(SPELL_AURA_MOD_TOTAL_STAT_PERCENTAGE);
+                for (Unit::AuraList::const_iterator i = modAuras.begin(); i != modAuras.end(); ++i)
+                {
+                    if ((*i)->GetSpellProto()->SpellFamilyName == SPELLFAMILY_DRUID &&
+                        (*i)->GetSpellProto()->SpellIconID == 961)
+                    {
+                        int32 bp = (*i)->GetSpellProto()->CalculateSimpleValue(EFFECT_INDEX_2);
+                        if (bp)
+                            target->CastCustomSpell(target, 62069, &bp, NULL, NULL, true, NULL, this);
+                        break;
+                    }
+                }
+            }
+
             // Improved Moonkin Form
             if (form == FORM_MOONKIN)
             {
@@ -9535,14 +9552,8 @@ void SpellAuraHolder::UnregisterSingleCastHolder()
     if (IsSingleTarget())
     {
         if(Unit* caster = GetCaster())
-        {
-            caster->GetSingleCastSpellAuraHolders().remove(this);
-        }
-        else
-        {
-            sLog.outError("Couldn't find the caster of the single target aura (SpellId %u), may crash later!", GetId());
-            MANGOS_ASSERT(false);
-        }
+            caster->GetSingleCastSpellTargets().erase(GetSpellProto());
+
         m_isSingleTarget = false;
     }
 }

@@ -1622,13 +1622,6 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, Aura
                     // triggered_spell_id in spell data
                     break;
                 }
-                // Glyphe de prière de soins
-                case 55680:
-                {
-                    basepoints[0] = int32(damage * 20 / 200);   // divided in two ticks
-                    triggered_spell_id = 56161;
-                    break;
-                }
                 // Item - Priest T10 Healer 2P Bonus
                 case 70770:
                 {
@@ -1637,6 +1630,13 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, Aura
 
                     basepoints[0] = int32(damage * triggerAmount / 100 / 3); // 11% per 1 tick
                     triggered_spell_id = 70772;
+                    break;
+                }
+                // Glyph of Prayer of Healing
+                case 55680:
+                {
+                    basepoints[0] = int32(damage * triggerAmount  / 200);   // 10% each tick
+                    triggered_spell_id = 56161;
                     break;
                 }
             }
