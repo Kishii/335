@@ -2,6 +2,7 @@
 Mise à jour 2.1 :
 ------------------------------------------------------------------------------------------
 
+    * Implantation de la fonction : CMSG_PET_STOP_ATTACK.
     * Implantation du sort : Détection des pièges ( 2836 ).
     * Correction du sort : Mastodonte ( 64976 ).
     * Correction du sort : Roi de la jungle ( 51185 ).
