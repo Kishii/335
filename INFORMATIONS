@@ -3,6 +3,7 @@ Mise à jour 2.1 :
 ------------------------------------------------------------------------------------------
 
     * Implantation de la fonction : CMSG_PET_STOP_ATTACK.
+    * Implantation des effets ( Visuel ) de l'item Shadowmourne.
     * Implantation du sort : Détection des pièges ( 2836 ).
     * Implantation du sort : Charge étourdissante ( 7922 ).
     * Implantation du sort : Barrage de projectiles ( 54490 ).
@@ -13,6 +14,7 @@ Mise à jour 2.1 :
     * Correction du sort : Maître de la discrétion ( 31223 ).
     * Correction du sort : Outrance meurtrière ( 58426 ).
     * Correction de la vie / points de mana.. etc.. des famillier mage / démoniste / chasseur / chevalier de la mort.
+    * Correction des aura d'invisibilité.
 
 ------------------------------------------------------------------------------------------
 Mise à jour 2.0 :

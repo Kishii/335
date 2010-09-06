@@ -1596,7 +1596,7 @@ class MANGOS_DLL_SPEC Player : public Unit
         const uint64& GetSelection( ) const { return m_curSelection; }
         void SetSelection(const uint64 &guid) { m_curSelection = guid; SetTargetGUID(guid); }
 
-        uint8 GetComboPoints() { return m_comboPoints; }
+        uint8 GetComboPoints() const { return m_comboPoints; }
         const uint64& GetComboTarget() const { return m_comboTarget; }
 
         void AddComboPoints(Unit* target, int8 count);

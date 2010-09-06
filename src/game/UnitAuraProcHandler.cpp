@@ -1103,9 +1103,24 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, Aura
                         return SPELL_AURA_PROC_FAILED;
 
                     SpellAuraHolder *aurHolder = GetSpellAuraHolder(71905);
-                    if (aurHolder && uint32(aurHolder->GetStackAmount() + 1) >= aurHolder->GetSpellProto()->StackAmount)
+                    if (aurHolder && uint32(aurHolder->GetStackAmount() + 1) == 0)
+                    {
+                        RemoveAurasDueToSpell(72521);       // Remove First Effect
+                        RemoveAurasDueToSpell(72523);       // Remove Second Effect
+                    }
+                    else if (aurHolder && uint32(aurHolder->GetStackAmount() + 1) == 1)
+					{
+                        CastSpell(this, 72521, true);      // First Effect
+					}
+                    else if (aurHolder && uint32(aurHolder->GetStackAmount() + 1) == 6)
+                    {
+                        RemoveAurasDueToSpell(72521);       // Remove First Effect
+                        CastSpell(this, 72523, true);      // Add Second Effect
+                    }
+                    else if (aurHolder && uint32(aurHolder->GetStackAmount() + 1) >= aurHolder->GetSpellProto()->StackAmount)
                     {
                         RemoveAurasDueToSpell(71905);
+                        RemoveAurasDueToSpell(72523);       // Remove Second Effect
                         CastSpell(this, 71904, true);       // Chaos Bane
                         return SPELL_AURA_PROC_OK;
                     }
