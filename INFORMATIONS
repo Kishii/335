@@ -14,6 +14,7 @@ Mise à jour 2.1 :
     * Correction de la fonction "MeleeMissChanceCalc" ( Corrige les dégats d'armes en melée ).
     * Correction de la fonction "MeleeSpellMissChance" ( Corrige les dégats de sorts en melée ).
     * Correction du sort : Mastodonte ( 64976 ).
+    * Correction du sort : Porteguerre ( 57499 ).
     * Correction du sort : Roi de la jungle ( 51185 ).
     * Correction du sort : Rage de Vaillefendre ( 50117 ).
     * Correction du sort : Bouclier de dégâts ( 58874 ).

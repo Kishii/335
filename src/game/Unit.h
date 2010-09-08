@@ -2019,7 +2019,8 @@ class MANGOS_DLL_SPEC Unit : public WorldObject
         uint32 m_reactiveTimer[MAX_REACTIVE];
         uint32 m_regenTimer;
         uint32 m_lastManaUseTimer;
-        uint64  m_auraUpdateMask;
+        float m_lastAuraProcRoll;
+        uint64 m_auraUpdateMask;
 
         uint64 m_vehicleGUID;
         VehicleKit* m_vehicle;

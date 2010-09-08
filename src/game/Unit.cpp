@@ -6651,6 +6651,7 @@ uint32 Unit::SpellDamageBonusDone(Unit *pVictim, SpellEntry const *spellProto, u
                     }
                 }
                 break;
+			}
             // Death Coil (bonus from Item - Death Knight T8 DPS Relic)
             else if (spellProto->SpellFamilyFlags & UI64LIT(0x00002000))
             {

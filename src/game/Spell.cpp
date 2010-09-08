@@ -3203,9 +3203,12 @@ void Spell::handle_immediate()
     // start channeling if applicable
     if(IsChanneledSpell(m_spellInfo))
     {
-        int32 duration = m_caster->CalculateBaseSpellDuration(m_spellInfo);
+        int32 duration = GetSpellDuration(m_spellInfo);
         if (duration)
         {
+            // Apply duration mod
+            if(Player* modOwner = m_caster->GetSpellModOwner())
+                modOwner->ApplySpellMod(m_spellInfo->Id, SPELLMOD_DURATION, duration);
             m_spellState = SPELL_STATE_CASTING;
             SendChannelStart(duration);
         }
@@ -3227,7 +3230,7 @@ void Spell::handle_immediate()
     TakeCastItem();
 
     if(m_spellState != SPELL_STATE_CASTING)
-        finish(true);                                       // successfully finish spell cast (not last in case autorepeat or channel spell)
+        finish(true); // successfully finish spell cast (not last in case autorepeat or channel spell)
 }
 
 uint64 Spell::handle_delayed(uint64 t_offset)
@@ -4494,11 +4497,7 @@ SpellCastResult Spell::CheckCast(bool strict)
             if(bg->GetStatus() == STATUS_WAIT_LEAVE)
                 return SPELL_FAILED_DONT_REPORT;
  
-    // Porteguerre + Mastodonte
-    if (m_spellInfo->SpellFamilyName == SPELLFAMILY_WARRIOR && m_spellInfo->Category == 1219 && m_spellInfo->SpellIconID == 457 && (m_caster->HasAura(57499) || m_caster->HasAura(64976)))
-        IsNonCombatSpell(m_spellInfo) = false;
-
-    if (m_caster->isInCombat() && IsNonCombatSpell(m_spellInfo))
+    if (m_caster->isInCombat() && IsNonCombatSpell(m_spellInfo) && !m_caster->isIgnoreUnitState(m_spellInfo))
         return m_triggeredByAuraSpell ? SPELL_FAILED_DONT_REPORT : SPELL_FAILED_AFFECTING_COMBAT;
 
     if (m_caster->GetTypeId() == TYPEID_PLAYER && !((Player*)m_caster)->isGameMaster() &&
