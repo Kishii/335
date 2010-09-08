@@ -18,7 +18,8 @@ Mise à jour 2.1 :
     * Correction du sort : Doigts de givre ( 44543 ).
     * Correction de la vie / points de mana.. etc.. des famillier mage / démoniste / chasseur / chevalier de la mort.
     * Correction des aura d'invisibilité.
-    * Correction de la fonction "Unit::MeleeMissChanceCalc"
+    * Correction de la fonction "MeleeMissChanceCalc" ( Corrige les dégats d'armes en melée ).
+    * Correction de la fonction "MeleeSpellMissChance" ( Corrige les dégats de sorts en melée ).
 
 ------------------------------------------------------------------------------------------
 Mise à jour 2.0 :
