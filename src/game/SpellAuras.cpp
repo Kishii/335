@@ -2137,7 +2137,7 @@ void Aura::HandleAuraDummy(bool apply, bool Real)
                     if (Aura *aur = target->GetAura(74396, EFFECT_INDEX_0))
                     {
                         if (aur->GetStackAmount() < 3)
-                            GetHolder()->SetAuraCharges(3);
+                            aur->GetHolder()->SetAuraCharges(3);
                     }
                 }
                 break;

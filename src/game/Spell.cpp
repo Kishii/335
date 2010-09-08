@@ -3562,11 +3562,14 @@ void Spell::finish(bool ok)
     if( m_spellInfo->Attributes & SPELL_ATTR_STOP_ATTACK_TARGET )
         m_caster->AttackStop();
 
+
     // hack for Fingers of Frost stacks remove
     if(m_caster->HasAura(74396) && !m_IsTriggeredSpell && m_spellInfo->SpellFamilyName == SPELLFAMILY_MAGE)
         if (Aura *aur = m_caster->GetAura(74396, EFFECT_INDEX_0))
-            if(aur->GetHolder()->DropAuraCharge())
-                m_caster->RemoveAura(aur);
+               if(aur->GetHolder()->GetAuraCharges() <= 1)
+                               m_caster->RemoveAurasDueToSpell(74396);
+            else if(aur->GetHolder()->DropAuraCharge())
+                               m_caster->RemoveAura(aur);
 
     // hack for SPELL_AURA_IGNORE_UNIT_STATE charges
     bool break_for = false;
@@ -3575,18 +3578,23 @@ void Spell::finish(bool ok)
     {
         switch((*j)->GetId())
         {
-            case 52437:        //Sudden death should disappear after execute
+            case 52437:                        //Sudden death should disappear after execute
                 if (m_spellInfo->SpellIconID == 1648)
                 {
-                    m_caster->RemoveAura((*j));
-                    break_for = true;
+                                       if((*j)->GetHolder()->GetAuraCharges() <= 1)
+                                               m_caster->RemoveAurasDueToSpell(52437);                  
+                                               break_for = true;
                 }
                 break;
-            case 60503:        // Taste for blood 
+            case 60503:        // Taste for blood
             case 68051:        // Glyph of overpower - Both should disappear after overpower
                 if(m_spellInfo->Id == 7384)
                 {
-                    m_caster->RemoveAura((*j));
+                                       if((*j)->GetHolder()->GetAuraCharges() <= 1)
+                                       {
+                                               m_caster->RemoveAurasDueToSpell(60503);
+                                               m_caster->RemoveAurasDueToSpell(68051);
+                                       }
                     break_for = true;
                 }
                 break;
