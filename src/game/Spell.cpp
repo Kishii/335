@@ -4493,6 +4493,10 @@ SpellCastResult Spell::CheckCast(bool strict)
         if(BattleGround * bg = ((Player*)m_caster)->GetBattleGround())
             if(bg->GetStatus() == STATUS_WAIT_LEAVE)
                 return SPELL_FAILED_DONT_REPORT;
+ 
+    // Porteguerre + Mastodonte
+    if (m_spellInfo->SpellFamilyName == SPELLFAMILY_WARRIOR && m_spellInfo->Category == 1219 && m_spellInfo->SpellIconID == 457 && (m_caster->HasAura(57499) || m_caster->HasAura(64976)))
+        IsNonCombatSpell(m_spellInfo) = false;
 
     if (m_caster->isInCombat() && IsNonCombatSpell(m_spellInfo))
         return m_triggeredByAuraSpell ? SPELL_FAILED_DONT_REPORT : SPELL_FAILED_AFFECTING_COMBAT;

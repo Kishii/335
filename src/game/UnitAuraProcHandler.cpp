@@ -1769,6 +1769,12 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, Aura
                     triggered_spell_id = 54755;
                     break;
                 }
+                // Glyph of Rake
+                case 54821:
+                {
+                    triggered_spell_id = 54820;
+                    break;
+                }
                 // Item - Druid T10 Restoration 4P Bonus (Rejuvenation)
                 case 70664:
                 {
@@ -2425,6 +2431,10 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, Aura
                     }
 
                     int32 extra_attack_power = CalculateSpellDamage(pVictim, windfurySpellEntry, EFFECT_INDEX_1);
+                    
+                    // Totem of Splintering
+                    if (Aura* aura = GetAura(60764, EFFECT_INDEX_0))
+                        extra_attack_power += aura->GetModifier()->m_amount;
 
                     // Totem brisant
                     if (Aura* aura = GetAura(60764, EFFECT_INDEX_0))

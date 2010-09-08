@@ -8,6 +8,11 @@ Mise à jour 2.1 :
     * Implantation du sort : Charge étourdissante ( 7922 ).
     * Implantation du sort : Barrage de projectiles ( 54490 ).
     * Implantation du sort : Prêt pour Fulgurance ! ( 68051 ).
+    * Implantation du sort : Glyphe de griffure ( 54821 ).
+    * Correction de la vie / points de mana.. etc.. des famillier mage / démoniste / chasseur / chevalier de la mort.
+    * Correction des aura d'invisibilité.
+    * Correction de la fonction "MeleeMissChanceCalc" ( Corrige les dégats d'armes en melée ).
+    * Correction de la fonction "MeleeSpellMissChance" ( Corrige les dégats de sorts en melée ).
     * Correction du sort : Mastodonte ( 64976 ).
     * Correction du sort : Roi de la jungle ( 51185 ).
     * Correction du sort : Rage de Vaillefendre ( 50117 ).
@@ -16,10 +21,8 @@ Mise à jour 2.1 :
     * Correction du sort : Outrance meurtrière ( 58426 ).
     * Correction du sort : Mort soudaine ( 29725 ).
     * Correction du sort : Doigts de givre ( 44543 ).
-    * Correction de la vie / points de mana.. etc.. des famillier mage / démoniste / chasseur / chevalier de la mort.
-    * Correction des aura d'invisibilité.
-    * Correction de la fonction "MeleeMissChanceCalc" ( Corrige les dégats d'armes en melée ).
-    * Correction de la fonction "MeleeSpellMissChance" ( Corrige les dégats de sorts en melée ).
+    * Correction du sort : Assaillir ( 51692 ).
+    * Correction du sort : Anéantissement ( 49020 ).
 
 ------------------------------------------------------------------------------------------
 Mise à jour 2.0 :
