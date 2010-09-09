@@ -2,6 +2,12 @@
 Mise à jour 2.1 :
 ------------------------------------------------------------------------------------------
 
+    * Implantation du système des battleground aléatoire.
+
+------------------------------------------------------------------------------------------
+Mise à jour 2.1 :
+------------------------------------------------------------------------------------------
+
     * Implantation de la fonction : CMSG_PET_STOP_ATTACK.
     * Implantation des effets ( Visuel ) de l'item Shadowmourne.
     * Implantation du sort : Détection des pièges ( 2836 ).
