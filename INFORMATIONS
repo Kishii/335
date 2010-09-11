@@ -13,37 +13,37 @@ Mise à jour 2.2 :
     * Correction de toutes les résistances.
     * Correction de l'armure de pénétration ( TEST ).
     * Correction de la vie / points de mana.. etc.. des famillier mage / démoniste / chasseur / chevalier de la mort.
-	
-    * Correction du sort : Cor de l'hiver ( 57623 ).
-    * Correction du sort : Intelligence des arcanes ( 42995 ).
-    * Correction du sort : Esprit divin ( 48073 ).
-    * Correction du sort : Bénédiction du sanctuaire ( 20911 ).
-    * Correction du sort : Bénédiction des rois supérieure ( 25898 ).
-    * Correction du sort : Bénédiction des rois ( 20217 ).
-    * Correction du sort : Saccager ( 2980 ).
-    * Correction du sort : Bénédiction de sagesse ( 48936 ).
-    * Correction du sort : Regain d'espoir ( 57472 ).
-    * Correction du sort : Vigilance ( 5072 ).
-    * Correction du sort : Glyphe de salut ( 63871 ).
-    * Correction du sort : Suppression de la douleur ( 33206 ).
-    * Correction du sort : Protéger ( 46949 ).
-    * Correction du sort : Bénédiction de puissance supérieur ( 48934 ).
-    * Correction du sort : Cri de guerre ( 47436 ).
-    * Correction du sort : Guérison des anciens ( 16240 ).
-    * Correction du sort : Inspiration ( 15363 ).
-    * Correction du sort : Serres de glace améliorées ( 55610 ).
-    * Correction du sort : Puissance abominable ( 55972 ).
-    * Correction du sort : Rage libérée ( 30809 ).
-    * Correction du sort : Aura de précision ( 19506 ).
-    * Correction du sort : Cri de commandement ( 47440 ).
-    * Correction du sort : Totem Langue de feu ( 58656 ).
-    * Correction du sort : Totem de courroux ( 57722 ).
-    * Correction du sort : Totem de force de la terre ( 58643 ).
-    * Correction du sort : Chef de la meute ( 17007 ).
-    * Correction du sort : Totem fontaine de mana ( 58774 ).
-    * Correction du sort : Aura de dévotion améliorée ( 20140 ).
-    * Correction du sort : Pacte de sang ( 47982
-	
+    * Correction des proc de poisons.
+    * Correction des stack : 
+	 - Cor de l'hiver ( 57623 ).
+	 - Intelligence des arcanes ( 42995 ).
+	 - Esprit divin ( 48073 ).
+     - Bénédiction du sanctuaire ( 20911 ).
+	 - Bénédiction des rois supérieure ( 25898 ).
+	 - Bénédiction des rois ( 20217 ).
+	 - Saccager ( 2980 ).
+	 - Bénédiction de sagesse ( 48936 ).
+	 - Regain d'espoir ( 57472 ).
+	 - Vigilance ( 5072 ).
+	 - Glyphe de salut ( 63871 ).
+	 - Suppression de la douleur ( 33206 ).
+	 - Protéger ( 46949 ).
+	 - Bénédiction de puissance supérieur ( 48934 ).
+	 - Cri de guerre ( 47436 ).
+	 - Guérison des anciens ( 16240 ).
+	 - Inspiration ( 15363 ).
+	 - Serres de glace améliorées ( 55610 ).
+	 - Puissance abominable ( 55972 ).
+	 - Rage libérée ( 30809 ).
+	 - Aura de précision ( 19506 ).
+	 - Cri de commandement ( 47440 ).
+	 - Totem Langue de feu ( 58656 ).
+	 - Totem de courroux ( 57722 ).
+	 - Totem de force de la terre ( 58643 ).
+	 - Chef de la meute ( 17007 ).
+	 - Totem fontaine de mana ( 58774 ).
+	 - Aura de dévotion améliorée ( 20140 ).
+	 - Pacte de sang ( 47982
     * Correction du sort : Totem de griffes de pierre ( 58591 ).
     * Correction du sort : Image miroir ( 55342 ).
     * Correction du sort : Ardent defenseur ( 31850 ).
