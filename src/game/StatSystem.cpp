@@ -913,28 +913,90 @@ bool Pet::UpdateStats(Stats stat)
 
     Unit *owner = GetOwner();
 
-    if (owner)
+    if (owner && owner->GetTypeId() == TYPEID_PLAYER)
     {
+        float scale_coeff = 0.0f;
         switch(stat)
         {
-            case STAT_STAMINA:
-                // warlock's pets gain 75% of owner's stamina
-                if (getPetType() == SUMMON_PET && owner->getClass() == CLASS_WARLOCK)
-                    value += owner->GetStat(stat) * 0.75f;
-                else if (getPetType() == SUMMON_PET || getPetType() == HUNTER_PET)
-                    value += owner->GetStat(stat) * 0.3f;
-                break;
-            case STAT_INTELLECT:
-                // warlock's and mage's pets gain 30% of owner's intellect
-                if (getPetType() == SUMMON_PET && (owner->getClass() == CLASS_WARLOCK || owner->getClass() == CLASS_MAGE))
-                    value += owner->GetStat(stat) * 0.3f;
-                break;
             case STAT_STRENGTH:
-                // DK's Ghoul receive 70% of master's strength untalented
-                if (getPetType() == SUMMON_PET && owner->getClass() == CLASS_DEATH_KNIGHT)
-                    value += owner->GetStat(stat) * 0.7f;
+            {
+                if(owner->getClass() == CLASS_DEATH_KNIGHT)
+                {
+                    if(getPetType() == SUMMON_PET)
+                    {
+                        scale_coeff = 0.7f;
+                        // Ravenous Dead
+                        if (SpellEntry const* spell = ((Player*)owner)->GetKnownTalentRankById(1934))
+                            scale_coeff *= 1.0f + spell->CalculateSimpleValue(EFFECT_INDEX_1) / 100.0f;
+                        // Glyph of Ghoul
+                        if (Aura *glyph = owner->GetDummyAura(58686))
+                            scale_coeff += glyph->GetModifier()->m_amount / 100.0f;
+                    }
+                }
                 break;
-        };
+            }
+            case STAT_STAMINA:
+            {
+                scale_coeff = 0.3f;
+                switch (owner->getClass())
+                {
+                    case CLASS_HUNTER:
+                    {
+                        scale_coeff = 0.45f;
+                        //Wild Hunt
+                        uint32 bonus_id = 0;
+                        if (HasSpell(62762))
+                            bonus_id = 62762;
+                        else if(HasSpell(62758))
+                            bonus_id = 62758;
+                        if (const SpellEntry *bonusProto = sSpellStore.LookupEntry(bonus_id)) 
+                            scale_coeff *= 1 + bonusProto->CalculateSimpleValue(EFFECT_INDEX_0) / 100.0f;
+                        break;
+                    }
+                    case CLASS_WARLOCK:
+                    {
+                        CreatureInfo const *cinfo = GetCreatureInfo();
+                        CreatureFamily petFamily = (CreatureFamily) cinfo->family;
+                        switch (petFamily)
+                        {
+                            case CREATURE_FAMILY_FELHUNTER:  value += float(owner->GetStat(stat)) * 0.7125f; break;
+                            case CREATURE_FAMILY_VOIDWALKER: value += float(owner->GetStat(stat)) * 0.825f; break;
+                            case CREATURE_FAMILY_FELGUARD:   value += float(owner->GetStat(stat)) * 0.825f; break;
+                            case CREATURE_FAMILY_SUCCUBUS:   value += float(owner->GetStat(stat)) * 0.6825f; break;
+                            case CREATURE_FAMILY_IMP:        value += float(owner->GetStat(stat)) * 0.63f; break;
+                            default: value += float(owner->GetStat(stat)) * 0.3f; break;
+                        }
+                        break;
+                    }
+                    case CLASS_DEATH_KNIGHT:
+                    {
+                        if(getPetType() == SUMMON_PET)
+                        {
+                            // Ravenous Dead
+                            if (owner->GetTypeId() == TYPEID_PLAYER)
+                                if (SpellEntry const* spell = ((Player*)owner)->GetKnownTalentRankById(1934))
+                                    scale_coeff *= 1.0f + spell->CalculateSimpleValue(EFFECT_INDEX_1) / 100.0f;
+                            // Glyph of Ghoul
+                            if (Aura *glyph = owner->GetDummyAura(58686))
+                                scale_coeff += glyph->GetModifier()->m_amount / 100.0f;
+                        }
+                        break; 
+                    }
+                }
+                break;
+            }
+            case STAT_INTELLECT:
+            {
+                //warlock's and mage's pets gain 30% of owner's intellect
+                if (getPetType() == SUMMON_PET)
+                {
+                    if(owner && (owner->getClass() == CLASS_WARLOCK || owner->getClass() == CLASS_MAGE) )
+                        scale_coeff = 0.3f;
+                }
+                break;
+            }
+        }
+        value += float(owner->GetStat(stat)) * scale_coeff;
     }
 
     SetStat(stat, int32(value));

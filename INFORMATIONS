@@ -1,12 +1,13 @@
 ------------------------------------------------------------------------------------------
-Mise à jour 2.1 :
+Mise à jour 2.2 :
 ------------------------------------------------------------------------------------------
 
     * Implantation du système des battleground aléatoire.
     * Implantation des bonus de sorts.
     * Implantation du sort : Tailler dans le vif ( 51664 ).
     * Correction des effets de désarmement.
-    * Correction de toute les résistances.
+    * Correction de toutes les résistances.
+    * Correction de la vie / points de mana.. etc.. des famillier mage / démoniste / chasseur / chevalier de la mort.
     * Correction du sort : Cor de l'hiver ( 57623 ).
     * Correction du sort : Intelligence des arcanes ( 42995 ).
     * Correction du sort : Esprit divin ( 48073 ).
