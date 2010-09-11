@@ -7899,11 +7899,7 @@ void Spell::EffectSummonObject(SpellEffectIndex eff_idx)
     else
     {
         if(m_spellInfo->Id == 48018)
-        {
-            x = m_caster->GetPositionX();
-            y = m_caster->GetPositionY();
-            z = m_caster->GetPositionZ();
-        }
+            m_caster->GetPosition(x,y,z);
         else
             m_caster->GetClosePoint(x, y, z, DEFAULT_WORLD_OBJECT_SIZE);
     }
