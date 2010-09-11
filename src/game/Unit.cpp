@@ -2166,36 +2166,19 @@ void Unit::CalculateAbsorbAndResist(Unit *pCaster, SpellSchoolMask schoolMask, D
             case SPELLFAMILY_PALADIN:
             {
                 // Ardent Defender
-                if (spellProto->SpellIconID == 2135 && GetTypeId() == TYPEID_PLAYER)
+                if (spellProto->SpellIconID == 2135)
                 {
-                    int32 remainingHealth = GetHealth() - RemainingDamage;
-                    uint32 allowedHealth = GetMaxHealth() * 0.35f;
-                    // If damage kills us
-                    if (remainingHealth <= 0 && !HasAura(66233))
-                    {
-                        // Cast healing spell, completely avoid damage
-                        RemainingDamage = 0;
-                        
-                        uint32 defenseSkillValue = GetDefenseSkillValue();
-                        // Max heal when defense skill denies critical hits from raid bosses
-                        // Formula: max defense at level + 140 (raiting from gear)
-                        uint32 reqDefForMaxHeal  = getLevel() * 5 + 140;
-                        float pctFromDefense = (defenseSkillValue >= reqDefForMaxHeal)
-                            ? 1.0f
-                            : float(defenseSkillValue) / float(reqDefForMaxHeal);
+                    // Apply absorb only on damage below 35% hp 
+                    int32 absorbableDamage = RemainingDamage + 0.35f * GetMaxHealth() - GetHealth();
+                    if (absorbableDamage > RemainingDamage)
+                        absorbableDamage = RemainingDamage;
+                    if (absorbableDamage > 0)
+                        RemainingDamage -= absorbableDamage * currentAbsorb / 100;
 
-                        int32 healAmount = GetMaxHealth() * ((*i)->GetSpellProto()->EffectBasePoints[1] + 1) / 100.0f * pctFromDefense;
-                        CastSpell(this, 66233, true);
-                        CastCustomSpell(this, 66235, &healAmount, NULL, NULL, true);
-                    }
-                    else if (remainingHealth < int32(allowedHealth))
-                    {
-                        // Reduce damage that brings us under 35% (or full damage if we are already under 35%) by x%
-                        uint32 damageToReduce = (GetHealth() < allowedHealth)
-                            ? RemainingDamage
-                            : allowedHealth - remainingHealth;
-                        RemainingDamage -= damageToReduce * currentAbsorb / 100;
-                    }
+                    // 66233 is cooldown aura
+                    if (!((Player*)this)->HasAura(66233))
+                        preventDeathSpell = (*i)->GetSpellProto();
+
                     continue;
                 }
                 break;
@@ -2525,6 +2508,33 @@ void Unit::CalculateAbsorbAndResist(Unit *pCaster, SpellSchoolMask schoolMask, D
                     CastCustomSpell(this, 48153, &healAmount, NULL, NULL, true);
                     RemoveAurasDueToSpell(preventDeathSpell->Id);
                     RemainingDamage = 0;
+                }
+                break;
+            }
+            case SPELLFAMILY_PALADIN:
+            {
+                // Ardent Defender
+                if (preventDeathSpell->SpellIconID == 2135)
+                {
+                    // Calculate defense over level * 5
+                    int32 defenseAmount = GetDefenseSkillValue() - getLevel() * 5; 
+                    // Proceed if positive value
+                    if (defenseAmount > 0)
+                    {
+                        // Defense cap
+                        if (defenseAmount > 140)
+                            defenseAmount = 140;
+                        // Trigger cooldown aura
+                        CastSpell(this, 66233, true);
+                        // Calculate heal amount
+                        int32 healAmount = preventDeathSpell->CalculateSimpleValue(EFFECT_INDEX_1);
+                        healAmount = defenseAmount * GetMaxHealth() * healAmount / 14000 - GetHealth();
+                        // Heal if positive value
+                        if (healAmount > 0)
+                            CastCustomSpell(this, 66235, &healAmount, NULL, NULL, true);
+                        // Absorb Everything
+                        RemainingDamage = 0;
+                    }
                 }
                 break;
             }

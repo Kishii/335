@@ -1827,6 +1827,23 @@ bool SpellMgr::IsNoStackSpellDueToSpell(uint32 spellId_1, uint32 spellId_2) cons
     if ((spellInfo_1->Attributes & SPELL_ATTR_PASSIVE)!=(spellInfo_2->Attributes & SPELL_ATTR_PASSIVE))
         return false;
 
+    // Dispersion - stacks with everything
+     if ((spellInfo_1->Id == 47585 && spellInfo_2->Id == 60069) ||
+          (spellInfo_2->Id == 47585 && spellInfo_1->Id == 60069))
+          return false;
+
+    // Mistletoe debuff stack with everything
+     if (spellInfo_1->Id == 26218 || spellInfo_2->Id == 26218)
+         return false;
+
+     // Improved Mind Blast debuff stacks with everything
+     if (spellInfo_1->Id == 48301 || spellInfo_2->Id == 48301)
+         return false;
+
+     // Ardent Defender cooldown debuff stacks with everything
+    if (spellInfo_1->Id == 66233 || spellInfo_2->Id == 66233)
+        return false;
+
     // Specific spell family spells
     switch(spellInfo_1->SpellFamilyName)
     {
@@ -2122,11 +2139,6 @@ bool SpellMgr::IsNoStackSpellDueToSpell(uint32 spellId_1, uint32 spellId_2) cons
                 //StarShards and Shadow Word: Pain
                 if ((spellInfo_1->SpellFamilyFlags & UI64LIT(0x200000)) && (spellInfo_2->SpellFamilyFlags & UI64LIT(0x8000)) ||
                     (spellInfo_2->SpellFamilyFlags & UI64LIT(0x200000)) && (spellInfo_1->SpellFamilyFlags & UI64LIT(0x8000)))
-                    return false;
-
-                // Dispersion
-                if ((spellInfo_1->Id == 47585 && spellInfo_2->Id == 60069) ||
-                    (spellInfo_2->Id == 47585 && spellInfo_1->Id == 60069))
                     return false;
 					
                 // Mot de pouvoir : Bouclier et Egide divine
