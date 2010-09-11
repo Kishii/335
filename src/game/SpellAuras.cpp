@@ -2970,8 +2970,6 @@ void Aura::HandleAuraModShapeshift(bool apply, bool Real)
         if(target->m_ShapeShiftFormSpellId)
             target->RemoveAurasDueToSpell(target->m_ShapeShiftFormSpellId, GetHolder());
 
-        target->SetByteValue(UNIT_FIELD_BYTES_2, 3, form);
-        // For Shadow Dance we must apply Stealth form (30) instead of current (13)
         target->SetByteValue(UNIT_FIELD_BYTES_2, 3, (form == FORM_SHADOW_DANCE) ? uint8(FORM_STEALTH) : form);
 
         if(modelid > 0)

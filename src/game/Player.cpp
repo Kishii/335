@@ -7413,7 +7413,7 @@ void Player::_ApplyItemBonuses(ItemPrototype const *proto, uint8 slot, bool appl
             ApplyFeralAPBonus(feral_bonus, apply);
     }
 
-    if(!IsUseEquippedWeapon(slot==EQUIPMENT_SLOT_MAINHAND))
+    if(!IsUseEquippedWeapon(attType))
         return;
 
     if (proto->Delay)
@@ -9278,7 +9278,7 @@ Item* Player::GetWeaponForAttack(WeaponAttackType attackType, bool nonbroken, bo
     if (!item || item->GetProto()->Class != ITEM_CLASS_WEAPON)
         return NULL;
 
-    if (useable && !IsUseEquippedWeapon(attackType==BASE_ATTACK))
+    if (useable && !IsUseEquippedWeapon(attackType))
         return NULL;
 
     if (nonbroken && item->IsBroken())
