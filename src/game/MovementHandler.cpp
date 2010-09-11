@@ -503,7 +503,6 @@ void WorldSession::HandleMoveNotActiveMover(WorldPacket &recv_data)
 void WorldSession::HandleDismissControlledVehicle(WorldPacket &recv_data)
 {
     DEBUG_LOG("WORLD: Recvd CMSG_DISMISS_CONTROLLED_VEHICLE");
-    recv_data.hexlike();
 
     ObjectGuid guid;
     MovementInfo mi;
@@ -530,7 +529,6 @@ void WorldSession::HandleDismissControlledVehicle(WorldPacket &recv_data)
 void WorldSession::HandleRequestVehicleExit(WorldPacket &recv_data)
 {
     sLog.outDebug("WORLD: Recvd CMSG_REQUEST_VEHICLE_EXIT");
-    recv_data.hexlike();
 
     GetPlayer()->ExitVehicle();
 }
@@ -538,7 +536,6 @@ void WorldSession::HandleRequestVehicleExit(WorldPacket &recv_data)
 void WorldSession::HandleRequestVehiclePrevSeat(WorldPacket &recv_data)
 {
     DEBUG_LOG("WORLD: Recvd CMSG_REQUEST_VEHICLE_PREV_SEAT");
-    recv_data.hexlike();
 
     GetPlayer()->ChangeSeat(-1, false);
 }
