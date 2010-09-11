@@ -3,6 +3,7 @@ Mise à jour 2.1 :
 ------------------------------------------------------------------------------------------
 
     * Implantation du système des battleground aléatoire.
+    * Implantation des bonus de sorts.
     * Implantation du sort : Tailler dans le vif ( 51664 ).
     * Correction des effets de désarmement.
     * Correction du sort : Totem de griffes de pierre ( 58591 ).
