@@ -271,6 +271,7 @@ void WorldSession::HandlePetAction( WorldPacket & recv_data )
     }
 }
 
+<<<<<<< HEAD
 void WorldSession::HandlePetStopAttack(WorldPacket & recv_data)
 {
     DEBUG_LOG("WORLD: Received CMSG_PET_STOP_ATTACK");
@@ -301,7 +302,7 @@ void WorldSession::HandlePetStopAttack(WorldPacket & recv_data)
     pet->GetMotionMaster()->Clear();
 }
 
-void WorldSession::HandlePetNameQuery( WorldPacket & recv_data )
+void WorldSession::HandlePetNameQueryOpcode( WorldPacket & recv_data )
 {
     DETAIL_LOG( "HandlePetNameQuery. CMSG_PET_NAME_QUERY" );
 
