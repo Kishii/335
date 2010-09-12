@@ -4,6 +4,7 @@ Mise à jour 2.2 :
 
     * Implantation du système des battleground aléatoire.
     * Implantation des bonus de sorts.
+    * Implantation d'un gain de rage lorsque que des dégats sont absorber.
     * Implantation du sort : Tailler dans le vif ( 51664 ).
     * Implantation du sort : Glyphe de veines glaciales ( 56374 ).
     * Implantation du sort : Boucherie ( 49483 ).
