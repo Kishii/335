@@ -3083,7 +3083,7 @@ float Unit::MeleeSpellMissChance(Unit *pVictim, WeaponAttackType attType, int32 
 }
 
 // Melee based spells hit result calculations
-SpellMissInfo Unit::MeleeSpellHitResult(Unit *pVictim, SpellEntry const *spell)
+SpellMissInfo Unit::MeleeSpellHitResult(Unit *pVictim, SpellEntry const *spell, bool canMiss)
 {
     WeaponAttackType attType = BASE_ATTACK;
 
@@ -3091,17 +3091,24 @@ SpellMissInfo Unit::MeleeSpellHitResult(Unit *pVictim, SpellEntry const *spell)
         attType = RANGED_ATTACK;
 
     // bonus from skills is 0.04% per skill Diff
-    int32 attackerWeaponSkill = int32(GetWeaponSkillValue(attType,pVictim));
+    int32 attackerWeaponSkill = !(spell->DmgClass == SPELL_DAMAGE_CLASS_RANGED && !(spell->Attributes & SPELL_ATTR_RANGED) )
+        ? int32(GetWeaponSkillValue(attType,pVictim))
+        : int32(GetMaxSkillValueForLevel());
+
     int32 skillDiff = attackerWeaponSkill - int32(pVictim->GetMaxSkillValueForLevel(this));
     int32 fullSkillDiff = attackerWeaponSkill - int32(pVictim->GetDefenseSkillValue(this));
 
     uint32 roll = urand (0, 10000);
+    uint32 tmp = 0;
 
-    uint32 missChance = uint32(MeleeSpellMissChance(pVictim, attType, fullSkillDiff, spell)*100.0f);
-    // Roll miss
-    uint32 tmp = missChance;
-    if (roll < tmp)
-        return SPELL_MISS_MISS;
+    if(canMiss)
+    {
+        uint32 missChance = uint32(MeleeSpellMissChance(pVictim, attType, fullSkillDiff, spell)*100.0f);
+        // Roll miss
+        tmp += missChance;
+        if (roll < tmp)
+            return SPELL_MISS_MISS;
+    }
 
     // Chance resist mechanic (select max value from every mechanic spell effect)
     int32 resist_mech = 0;
@@ -3131,14 +3138,10 @@ SpellMissInfo Unit::MeleeSpellHitResult(Unit *pVictim, SpellEntry const *spell)
     // Ranged attack cannot be parry/dodge only deflect
     if (attType == RANGED_ATTACK)
     {
-        // only if in front
-        if (pVictim->HasInArc(M_PI_F,this))
-        {
-            int32 deflect_chance = pVictim->GetTotalAuraModifier(SPELL_AURA_DEFLECT_SPELLS)*100;
-            tmp+=deflect_chance;
-            if (roll < tmp)
-                return SPELL_MISS_DEFLECT;
-        }
+        int32 deflect_chance = pVictim->GetTotalAuraModifier(SPELL_AURA_DEFLECT_SPELLS)*100;
+        tmp+=deflect_chance;
+        if (roll < tmp)
+            return SPELL_MISS_DEFLECT;
         return SPELL_MISS_NONE;
     }
 
@@ -3221,6 +3224,10 @@ SpellMissInfo Unit::MagicSpellHitResult(Unit *pVictim, SpellEntry const *spell)
     if (!pVictim->isAlive())
         return SPELL_MISS_NONE;
 
+    // Vehicles cannot miss on thier targets
+    if(GetTypeId() != TYPEID_PLAYER && ((Creature*)this)->isVehicle())
+        return SPELL_MISS_NONE;
+
     SpellSchoolMask schoolMask = GetSpellSchoolMask(spell);
     // PvP - PvE spell misschances per leveldif > 2
     int32 lchance = pVictim->GetTypeId() == TYPEID_PLAYER ? 7 : 11;
@@ -3269,9 +3276,16 @@ SpellMissInfo Unit::MagicSpellHitResult(Unit *pVictim, SpellEntry const *spell)
     // Increase hit chance from attacker SPELL_AURA_MOD_SPELL_HIT_CHANCE and attacker ratings
     HitChance += int32(m_modSpellHitChance*100.0f);
 
+    // Increase pet spell hit chance by additional master spell hit chance
+    if(GetOwner() && GetOwner()->GetTypeId() == TYPEID_PLAYER)
+        HitChance += int32(GetOwner()->m_modSpellHitChance*100.0f);
+
     // Decrease hit chance from victim rating bonus
     if (pVictim->GetTypeId()==TYPEID_PLAYER)
         HitChance -= int32(((Player*)pVictim)->GetRatingBonusValue(CR_HIT_TAKEN_SPELL)*100.0f);
+		
+    if (spell->Attributes & SPELL_ATTR_UNAFFECTED_BY_INVULNERABILITY)
+        HitChance = 10000; // Cannot resist SPELL_ATTR_UNAFFECTED_BY_INVULNERABILITY flagged spells.
 
     if (HitChance <  100) HitChance =  100;
     if (HitChance > 10000) HitChance = 10000;
@@ -3283,14 +3297,10 @@ SpellMissInfo Unit::MagicSpellHitResult(Unit *pVictim, SpellEntry const *spell)
     if (rand < tmp)
         return SPELL_MISS_MISS;
 
-    // cast by caster in front of victim
-    if (pVictim->HasInArc(M_PI_F,this))
-    {
-        int32 deflect_chance = pVictim->GetTotalAuraModifier(SPELL_AURA_DEFLECT_SPELLS)*100;
-        tmp+=deflect_chance;
-        if (rand < tmp)
-            return SPELL_MISS_DEFLECT;
-    }
+    int32 deflect_chance = pVictim->GetTotalAuraModifier(SPELL_AURA_DEFLECT_SPELLS)*100;
+    tmp+=deflect_chance;
+    if (rand < tmp)
+        return SPELL_MISS_DEFLECT;
 
     return SPELL_MISS_NONE;
 }
@@ -3303,7 +3313,7 @@ SpellMissInfo Unit::MagicSpellHitResult(Unit *pVictim, SpellEntry const *spell)
 //   Parry
 // For spells
 //   Resist
-SpellMissInfo Unit::SpellHitResult(Unit *pVictim, SpellEntry const *spell, bool CanReflect)
+SpellMissInfo Unit::SpellHitResult(Unit *pVictim, SpellEntry const *spell, bool canReflect, bool canMiss)
 {
     // Return evade for units in evade mode
     if (pVictim->GetTypeId()==TYPEID_UNIT && ((Creature*)pVictim)->IsInEvadeMode())
@@ -3328,7 +3338,7 @@ SpellMissInfo Unit::SpellHitResult(Unit *pVictim, SpellEntry const *spell, bool 
         return SPELL_MISS_NONE;
 
     // Try victim reflect spell
-    if (CanReflect)
+    if (canReflect)
     {
         int32 reflectchance = pVictim->GetTotalAuraModifier(SPELL_AURA_REFLECT_SPELLS);
         Unit::AuraList const& mReflectSpellsSchool = pVictim->GetAurasByType(SPELL_AURA_REFLECT_SPELLS_SCHOOL);
@@ -3345,13 +3355,16 @@ SpellMissInfo Unit::SpellHitResult(Unit *pVictim, SpellEntry const *spell, bool 
 
     switch (spell->DmgClass)
     {
+        case SPELL_DAMAGE_CLASS_RANGED:
+        case SPELL_DAMAGE_CLASS_MELEE:
+            return MeleeSpellHitResult(pVictim, spell, canMiss);
         case SPELL_DAMAGE_CLASS_NONE:
             return SPELL_MISS_NONE;
         case SPELL_DAMAGE_CLASS_MAGIC:
             return MagicSpellHitResult(pVictim, spell);
-        case SPELL_DAMAGE_CLASS_MELEE:
+        /*case SPELL_DAMAGE_CLASS_MELEE:
         case SPELL_DAMAGE_CLASS_RANGED:
-            return MeleeSpellHitResult(pVictim, spell);
+            return MeleeSpellHitResult(pVictim, spell);*/
     }
     return SPELL_MISS_NONE;
 }
