@@ -1868,6 +1868,25 @@ void Aura::TriggerSpell()
 
                 break;
             }
+            // Puissance terrestre
+            case 6474:
+            {
+                if ( Unit *caster = GetCaster() )
+                {
+                    if( Unit *owner = caster->GetOwner() ) 
+                    {
+                        float chance = 0;
+                        if ( owner->HasAura(51524) )
+                            chance = 100;
+                        else if ( owner->HasAura(51523) )
+                            chance = 50;
+
+                        if (roll_chance_f(chance))
+                            caster->CastSpell( caster, 59566, true ); 
+                    }
+                }
+                break;
+            }
             case 16191:                                     // Mana Tide
             {
                 triggerTarget->CastCustomSpell(triggerTarget, trigger_spell_id, &m_modifier.m_amount, NULL, NULL, true, NULL, this);
@@ -1895,28 +1914,6 @@ void Aura::TriggerSpell()
                 int32 mana = target->GetMaxPower(POWER_MANA) * m_modifier.m_amount / 100;
                 triggerTarget->CastCustomSpell(triggerTarget, trigger_spell_id, &mana, NULL, NULL, true, NULL, this);
                 return;
-            }
-            // Puissance terrestre
-            case 6474:
-            {
-                Unit *owner = triggerTarget->GetOwner();
-
-                if (!owner)
-                    break;
-
-                Unit::AuraList const& dummyAuras = owner->GetAurasByType(SPELL_AURA_DUMMY);
-                for(Unit::AuraList::const_iterator itr = dummyAuras.begin(); itr != dummyAuras.end(); ++itr)
-                {
-                    if ((*itr)->GetSpellProto()->SpellIconID == 2289 && (*itr)->GetSpellProto()->SpellFamilyName == SPELLFAMILY_SHAMAN)
-                    {
-                        if (!roll_chance_i((*itr)->GetModifier()->m_amount))
-                            break;
-
-                        triggerTarget->CastSpell(triggerTarget, 59566, true, NULL, this);
-                        break;
-                    }
-                }
-                break;
             }
         }
     }
