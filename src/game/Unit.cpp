@@ -11568,7 +11568,7 @@ class RelocationNotifyEvent : public BasicEvent
 
     private:
         Unit& m_owner;
-}
+};
 
 void Unit::SheduleAINotify(uint32 delay)
 {
