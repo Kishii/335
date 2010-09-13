@@ -2945,14 +2945,6 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
         Script->EffectDummyCreature(m_caster, m_spellInfo->Id, eff_idx, (Creature*)unitTarget);
     else if (itemTarget)
         Script->EffectDummyItem(m_caster, m_spellInfo->Id, eff_idx, itemTarget);
-		
-    // DB Scripting related check
-    if (!unitTarget)
-        return;
-
-    sLog.outDebug("Spell ScriptStart spellid %u in EffectDummy ", m_spellInfo->Id);
-    if(pSource->IsInWorld())
-        pSource->GetMap()->ScriptsStart(sSpellScripts, m_spellInfo->Id, pSource, unitTarget);
 }
 
 void Spell::EffectTriggerSpellWithValue(SpellEffectIndex eff_idx)
@@ -8952,12 +8944,6 @@ void Spell::EffectRestoreItemCharges( SpellEffectIndex eff_idx )
         return;
 
     item->RestoreCharges();
-}
-
-void Spell::EffectRedirectThreat(SpellEffectIndex eff_idx)
-{
-    if (unitTarget)
-        m_caster->getHostileRefManager().SetThreatRedirection(unitTarget->GetObjectGuid(), uint32(damage));
 }
 
 void Spell::EffectTeachTaxiNode( SpellEffectIndex eff_idx )

@@ -2604,65 +2604,6 @@ void Unit::CalculateAbsorbResistBlock(Unit *pCaster, SpellNonMeleeDamage *damage
     damageInfo->damage-= damageInfo->absorb + damageInfo->resist;
 }
 
-<<<<<<< HEAD
-void Unit::CalcHealAbsorb(Unit *pVictim, const SpellEntry *spellProto, uint32 &HealAmount, uint32 &Absorbed)
-{
-    int32 finalAmount = int32(HealAmount);
-    bool existExpired = false;
-
-    // handle heal absorb effects
-    AuraList const& healAbsorbAuras = pVictim->GetAurasByType(SPELL_AURA_SCHOOL_HEAL_ABSORB);
-    for (AuraList::const_iterator aura = healAbsorbAuras.begin(); aura != healAbsorbAuras.end() && finalAmount > 0; ++aura)
-    {
-        Modifier* mod = (*aura)->GetModifier();
-
-        // check if affects this school
-        if (!(mod->m_miscvalue & spellProto->SchoolMask))
-            continue;
-
-        // max amount that can be absorbed by this aura
-        int32 currentAbsorb = mod->m_amount;
-
-       // found empty aura (impossible but..)
-        if (currentAbsorb <= 0)
-        {
-            existExpired = true;
-           continue;
-        }
-
-        // can't absorb more than heal amount
-        if (finalAmount < currentAbsorb)
-            currentAbsorb = finalAmount;
-
-        // reduce heal amount by absorb amount
-        finalAmount -= currentAbsorb;
-
-        // reduce aura amount
-        mod->m_amount -= currentAbsorb;
-
-        // check if aura needs to be removed
-        if (mod->m_amount <= 0)
-            existExpired = true;
-    }
-
-    // Remove all consumed absorb auras
-    if (existExpired)
-    {
-        for (AuraList::const_iterator aura = healAbsorbAuras.begin(); aura != healAbsorbAuras.end(); )
-        {
-            if ((*aura)->GetModifier()->m_amount <= 0)
-            {
-                pVictim->RemoveAurasDueToSpell((*aura)->GetId());
-                aura = healAbsorbAuras.begin();
-            }
-            else
-                ++aura;
-        }
-    }
-
-    Absorbed = HealAmount - finalAmount;
-    HealAmount = finalAmount;
-=======
 void Unit::CalculateHealAbsorb(const uint32 heal, uint32 *absorb)
 {
     if (!isAlive() || !heal)
@@ -2722,7 +2663,6 @@ void Unit::CalculateHealAbsorb(const uint32 heal, uint32 *absorb)
     }
 
     *absorb = heal - RemainingHeal;
->>>>>>> a1ce6edd3b1d7a24d3f4b5cb706af08d1cba817e
 }
 
 void Unit::AttackerStateUpdate (Unit *pVictim, WeaponAttackType attType, bool extra )
@@ -6419,10 +6359,7 @@ void Unit::UnsummonAllTotems()
 
 int32 Unit::DealHeal(Unit *pVictim, uint32 addhealth, SpellEntry const *spellProto, bool critical, uint32 absorb)
 {
-    // calculate heal absorb and reduce healing
-    uint32 absorb = 0;
-    CalcHealAbsorb(pVictim, spellProto, addhealth, absorb);
-    int32 gain = addhealth ? pVictim->ModifyHealth(int32(addhealth)) : 0;
+    int32 gain = pVictim->ModifyHealth(int32(addhealth));
 
     Unit* unit = this;
 
@@ -6432,11 +6369,7 @@ int32 Unit::DealHeal(Unit *pVictim, uint32 addhealth, SpellEntry const *spellPro
     if (unit->GetTypeId()==TYPEID_PLAYER)
     {
         // overheal = addhealth - gain
-<<<<<<< HEAD
-        unit->SendHealSpellLog(pVictim, spellProto->Id, addhealth, addhealth - gain, absorb, critical);
-=======
         unit->SendHealSpellLog(pVictim, spellProto->Id, addhealth, addhealth - gain, critical, absorb);
->>>>>>> a1ce6edd3b1d7a24d3f4b5cb706af08d1cba817e
 
         if (BattleGround *bg = ((Player*)unit)->GetBattleGround())
             bg->UpdatePlayerScore((Player*)unit, SCORE_HEALING_DONE, gain);
@@ -6486,11 +6419,7 @@ Unit* Unit::SelectMagnetTarget(Unit *victim, SpellEntry const *spellInfo)
     return victim;
 }
 
-<<<<<<< HEAD
-void Unit::SendHealSpellLog(Unit *pVictim, uint32 SpellID, uint32 Damage, uint32 OverHeal, uint32 Absorb, bool critical)
-=======
 void Unit::SendHealSpellLog(Unit *pVictim, uint32 SpellID, uint32 Damage, uint32 OverHeal, bool critical, uint32 absorb)
->>>>>>> a1ce6edd3b1d7a24d3f4b5cb706af08d1cba817e
 {
     // we guess size
     WorldPacket data(SMSG_SPELLHEALLOG, (8+8+4+4+4+4+1+1));
@@ -6499,11 +6428,7 @@ void Unit::SendHealSpellLog(Unit *pVictim, uint32 SpellID, uint32 Damage, uint32
     data << uint32(SpellID);
     data << uint32(Damage);
     data << uint32(OverHeal);
-<<<<<<< HEAD
-    data << uint32(Absorb);
-=======
     data << uint32(absorb);
->>>>>>> a1ce6edd3b1d7a24d3f4b5cb706af08d1cba817e
     data << uint8(critical ? 1 : 0);
     data << uint8(0);                                       // unused in client?
     SendMessageToSet(&data, true);
@@ -7936,7 +7861,8 @@ uint32 Unit::MeleeDamageBonusTaken(Unit *pCaster, uint32 pdamage,WeaponAttackTyp
     if(spellProto && IsAreaOfEffectSpell(spellProto))
     {
         TakenPercent *= GetTotalAuraMultiplier(SPELL_AURA_MOD_AOE_DAMAGE_AVOIDANCE);
-
+    }
+		
     // ..taken (SPELL_AURA_MOD_DAMAGE_PERCENT_TAKEN)
     AuraList const& mModDamagePercentTaken = GetAurasByType(SPELL_AURA_MOD_DAMAGE_PERCENT_TAKEN);
     for(AuraList::const_iterator i = mModDamagePercentTaken.begin(); i != mModDamagePercentTaken.end(); ++i)
@@ -11642,7 +11568,7 @@ class RelocationNotifyEvent : public BasicEvent
 
     private:
         Unit& m_owner;
-};
+}
 
 void Unit::SheduleAINotify(uint32 delay)
 {

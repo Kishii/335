@@ -7133,11 +7133,9 @@ void Aura::PeriodicTick()
             DETAIL_FILTER_LOG(LOG_FILTER_PERIODIC_AFFECTS, "PeriodicTick: %u (TypeId: %u) heal of %u (TypeId: %u) for %u health inflicted by %u",
                 GUID_LOPART(GetCasterGUID()), GuidHigh2TypeId(GUID_HIPART(GetCasterGUID())), target->GetGUIDLow(), target->GetTypeId(), pdamage, GetId());
 
-            // calculate heal absorb and reduce healing
-            uint32 absorb = 0;
-            pCaster->CalcHealAbsorb(target, GetSpellProto(), pdamage, absorb);
-
             int32 gain = target->ModifyHealth(pdamage);
+
+            uint32 absorb = 0;
             SpellPeriodicAuraLogInfo pInfo(this, pdamage, (pdamage - uint32(gain)), absorb, 0, 0.0f, isCrit);
             target->SendPeriodicAuraLog(&pInfo);
 
