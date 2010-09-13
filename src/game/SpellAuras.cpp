@@ -8119,6 +8119,41 @@ void Aura::HandleCharmConvert(bool apply, bool Real)
     }
 }
 
+void Aura::HandleAuraModReflectSpells(bool Apply, bool Real)
+{
+    if (!Real)
+        return;
+
+    Unit* target = GetTarget();
+    Unit* caster = GetCaster();
+
+    if (Apply)
+    {
+        switch(GetId() )
+        {
+            // Improved Spell Reflection
+            case 23920:
+            {
+                if (!caster)
+                    return;
+
+                Unit::AuraList const& lDummyAuras = caster->GetAurasByType(SPELL_AURA_DUMMY);
+                for(Unit::AuraList::const_iterator i = lDummyAuras.begin(); i != lDummyAuras.end(); ++i)
+                {
+                    if((*i)->GetSpellProto()->SpellIconID == 1935)
+                    {
+                        caster->CastSpell(caster, 59725, true);
+                        break;
+                    }
+                }
+                break;
+            }
+            default:
+                break;
+        }
+    }
+}
+
 void Aura::HandleAuraInitializeImages(bool Apply, bool Real)
 {
     Unit * target = GetTarget();
@@ -8362,43 +8397,6 @@ void Aura::HandleAuraModAllCritChance(bool apply, bool Real)
 
     // included in Player::UpdateSpellCritChance calculation
     ((Player*)target)->UpdateAllSpellCritChances();
-}
-
-void Aura::HandleAuraModReflectSpells(bool Apply, bool Real)
-{
-    if(!Real)
-      return;
-    
-    Unit* target = GetTarget();
-    Unit* caster = GetCaster();
-  
-    if (Apply)
-    {
-        switch(GetId() )
-        {
-            // Improved Spell Reflection
-            case 23920:
-            {
-        
-                if (!caster)
-                return;
-      
-                Unit::AuraList const& lDummyAuras = caster->GetAurasByType(SPELL_AURA_DUMMY);
-                for(Unit::AuraList::const_iterator i = lDummyAuras.begin(); i != lDummyAuras.end(); ++i)
-                {
-                
-				    if((*i)->GetSpellProto()->SpellIconID == 1935)
-                    {
-                        caster->CastSpell(caster, 59725, true);
-                        break;
-                    }
-                }
-                break;
-            }
-            default:
-                break;
-         }    
-    }
 }
  
 void Aura::HandleAllowOnlyAbility(bool apply, bool Real)
