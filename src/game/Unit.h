@@ -1432,6 +1432,7 @@ class MANGOS_DLL_SPEC Unit : public WorldObject
 
         bool isFrozen() const;
         bool isIgnoreUnitState(SpellEntry const *spell);
+        uint32 GetModelForForm(ShapeshiftForm form);
 
         void RemoveSpellbyDamageTaken(AuraType auraType, uint32 damage);
 
