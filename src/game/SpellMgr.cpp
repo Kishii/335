@@ -2305,9 +2305,10 @@ bool SpellMgr::IsNoStackSpellDueToSpell(uint32 spellId_1, uint32 spellId_2) cons
                 if ((spellInfo_1->SpellIconID == 1487) && (spellInfo_2->SpellIconID == 1487))
                     return false;
 
-                // Seal of Corruption (caster/target parts stacking allow, other stacking checked by spell specs)
-                if (spellInfo_1->SpellIconID == 2292 && spellInfo_2->SpellIconID == 2292)
-                    return false;
+                // Seal of Corruption/Vengeance DoT and Righteouss Fury
+                 if ((spellInfo_1->SpellIconID == 3025 && spellInfo_2->SpellIconID == 2292) ||
+                     (spellInfo_1->SpellIconID == 2292 && spellInfo_2->SpellIconID == 3025))
+                     return false;
 
                 // Divine Sacrifice and Divine Guardian
                 if (spellInfo_1->SpellIconID == 3837 && spellInfo_2->SpellIconID == 3837)
