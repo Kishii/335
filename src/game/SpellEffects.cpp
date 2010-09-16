@@ -2894,8 +2894,11 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
             {
                 if (!unitTarget)
                     return;
-
+					
+                unitTarget->clearUnitState(UNIT_STAT_ALL_STATE);
+				
                 unitTarget->CastSpell(m_caster->GetPositionX(), m_caster->GetPositionY(), m_caster->GetPositionZ(), m_spellInfo->CalculateSimpleValue(EFFECT_INDEX_0), true);
+                m_caster->CastSpell(unitTarget, 51399, true, NULL);  
                 return;
             }
             // Obliterate
