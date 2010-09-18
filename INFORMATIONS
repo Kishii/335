@@ -18,6 +18,7 @@ Mise à jour 2.3 :
     * Correction du sort : Sceaux des purs ( 20332 ).
     * Correction du sort : Affliction éternelle ( 47205 ).
     * Correction du sort : Conflagrate ( 17962 ).
+    * Correction du sort : Poigne de la mort ( 49576 ), le sort est maintenant fonctionnel lorsqu'un joueurs à un bouclier ou autre ( ex : Bouclier divin ) et taunt correctement le joueur.
     * Implantation des couleurs pour les formes de druides.
     * Implantation du sort : Glyphe de chancre impie ( 63332 ).
     * Implantation du sort : Fureur de lave ( 60430 ).
