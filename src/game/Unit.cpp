@@ -3040,41 +3040,44 @@ bool Unit::IsSpellBlocked(Unit *pCaster, SpellEntry const * spellProto, WeaponAt
 float Unit::MeleeSpellMissChance(Unit *pVictim, WeaponAttackType attType, int32 skillDiff, SpellEntry const *spell)
 {
     // Calculate hit chance (more correct for chance mod)
-    float hitChance = 0.0f;
+    int32 HitChance;
 
     // PvP - PvE melee chances
-	if (pVictim->GetTypeId() == TYPEID_PLAYER)
-        hitChance = 95.0f + skillDiff * (skillDiff > 0 ? 0.02f : 0.04f);
-	else if (skillDiff < -10)
-        hitChance = 94.0f + (skillDiff + 10) * 0.4f;
-	else
-        hitChance = 95.0f + skillDiff * 0.1f;
+    int32 lchance = pVictim->GetTypeId() == TYPEID_PLAYER ? 5 : 7;
+    int32 leveldif = pVictim->getLevelForTarget(this) - getLevelForTarget(pVictim);
+    if(leveldif < 3)
+        HitChance = 95 - leveldif;
+    else
+        HitChance = 93 - (leveldif - 2) * lchance;
 
     // Hit chance depends from victim auras
-    if (attType == RANGED_ATTACK)
-        hitChance += pVictim->GetTotalAuraModifier(SPELL_AURA_MOD_ATTACKER_RANGED_HIT_CHANCE);
+    if(attType == RANGED_ATTACK)
+        HitChance += pVictim->GetTotalAuraModifier(SPELL_AURA_MOD_ATTACKER_RANGED_HIT_CHANCE);
     else
-        hitChance += pVictim->GetTotalAuraModifier(SPELL_AURA_MOD_ATTACKER_MELEE_HIT_CHANCE);
+        HitChance += pVictim->GetTotalAuraModifier(SPELL_AURA_MOD_ATTACKER_MELEE_HIT_CHANCE);
 
     // Spellmod from SPELLMOD_RESIST_MISS_CHANCE
-    if (Player *modOwner = GetSpellModOwner())
-        modOwner->ApplySpellMod(spell->Id, SPELLMOD_RESIST_MISS_CHANCE, hitChance);
+    if(Player *modOwner = GetSpellModOwner())
+        modOwner->ApplySpellMod(spell->Id, SPELLMOD_RESIST_MISS_CHANCE, HitChance);
 
     // Miss = 100 - hit
-    float missChance = 100.0f - hitChance;
+    float miss_chance= 100.0f - HitChance;
 
     // Bonuses from attacker aura and ratings
     if (attType == RANGED_ATTACK)
-        missChance -= m_modRangedHitChance;
+        miss_chance -= m_modRangedHitChance;
     else
-        missChance -= m_modMeleeHitChance;
+        miss_chance -= m_modMeleeHitChance;
+
+    // bonus from skills is 0.04%
+    miss_chance -= skillDiff * 0.04f;
 
     // Limit miss chance from 0 to 60%
-    if (missChance < 0.0f)
+    if (miss_chance < 0.0f)
         return 0.0f;
-    if (missChance > 60.0f)
+    if (miss_chance > 60.0f)
         return 60.0f;
-    return missChance;
+    return miss_chance;
 }
 
 // Melee based spells hit result calculations
