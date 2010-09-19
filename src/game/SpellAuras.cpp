@@ -7200,7 +7200,7 @@ void Aura::PeriodicTick()
             uint32 absorbHeal = 0;
             pCaster->CalculateHealAbsorb(heal, &absorbHeal);
             
-            int32 gain = pCaster->DealHeal(pCaster, heal, spellProto, false, absorbHeal);
+            int32 gain = pCaster->DealHeal(pCaster, heal - absorbHeal, spellProto, false, absorbHeal);
             pCaster->getHostileRefManager().threatAssist(pCaster, gain * 0.5f, spellProto);
             break;
         }
@@ -7251,13 +7251,17 @@ void Aura::PeriodicTick()
             // This method can modify pdamage
             bool isCrit = IsCritFromAbilityAura(pCaster, pdamage);
 
-            DETAIL_FILTER_LOG(LOG_FILTER_PERIODIC_AFFECTS, "PeriodicTick: %u (TypeId: %u) heal of %u (TypeId: %u) for %u health inflicted by %u",
-                GUID_LOPART(GetCasterGUID()), GuidHigh2TypeId(GUID_HIPART(GetCasterGUID())), target->GetGUIDLow(), target->GetTypeId(), pdamage, GetId());
+            uint32 absorbHeal = 0;
+            pCaster->CalculateHealAbsorb(pdamage, &absorbHeal);
+            pdamage -= absorbHeal;
+
+            DETAIL_FILTER_LOG(LOG_FILTER_PERIODIC_AFFECTS, "PeriodicTick: %u (TypeId: %u) heal of %u (TypeId: %u) for %u health  (absorbed %u) inflicted by %u",
+                GUID_LOPART(GetCasterGUID()), GuidHigh2TypeId(GUID_HIPART(GetCasterGUID())), target->GetGUIDLow(), target->GetTypeId(), pdamage, absorbHeal, GetId());
+
+
 
             int32 gain = target->ModifyHealth(pdamage);
-
-            uint32 absorb = 0;
-            SpellPeriodicAuraLogInfo pInfo(this, pdamage, (pdamage - uint32(gain)), absorb, 0, 0.0f, isCrit);
+            SpellPeriodicAuraLogInfo pInfo(this, pdamage, (pdamage - uint32(gain)), absorbHeal, 0, 0.0f, isCrit);
             target->SendPeriodicAuraLog(&pInfo);
 
             // Set trigger flag
@@ -8984,15 +8988,15 @@ bool SpellAuraHolder::ModStackAmount(int32 num)
     return false;
 }
 
-void SpellAuraHolder::SetStackAmount(uint8 stackAmount)
+void SpellAuraHolder::SetStackAmount(uint32 stackAmount)
 {
     Unit *target = GetTarget();
     Unit *caster = GetCaster();
     if (!target || !caster)
         return;
 
-    bool refresh = stackAmount >= m_stackAmount;
-    if (stackAmount != m_stackAmount)
+    bool refresh = stackAmount >= uint32(m_stackAmount);
+    if (stackAmount != uint32(m_stackAmount))
     {
         m_stackAmount = stackAmount;
 
@@ -9205,6 +9209,7 @@ void SpellAuraHolder::HandleSpellSpecificBoosts(bool apply)
             switch(GetId())
             {
                 case 29865:                                 // Deathbloom (10 man)
+                {
                     if (!apply && m_removeMode == AURA_REMOVE_BY_EXPIRE)
                     {
                         cast_at_remove = true;
@@ -9213,7 +9218,9 @@ void SpellAuraHolder::HandleSpellSpecificBoosts(bool apply)
                     else
                         return;
                     break;
+                }
                 case 55053:                                 // Deathbloom (25 man)
+                {
                     if (!apply && m_removeMode == AURA_REMOVE_BY_EXPIRE)
                     {
                         cast_at_remove = true;
@@ -9222,7 +9229,9 @@ void SpellAuraHolder::HandleSpellSpecificBoosts(bool apply)
                     else
                         return;
                     break;
+                }
                 case 57350:                                 // Illusionary Barrier
+				{
                     if (!apply && m_target->getPowerType() == POWER_MANA)
                     {
                         cast_at_remove = true;
@@ -9231,7 +9240,9 @@ void SpellAuraHolder::HandleSpellSpecificBoosts(bool apply)
                     else
                         return;
                     break;
+                }
                 case 62717:                                 // Slag Pot (10 man)
+                {
                     if (!apply && m_removeMode == AURA_REMOVE_BY_EXPIRE)
                     {
                         cast_at_remove = true;
@@ -9240,15 +9251,26 @@ void SpellAuraHolder::HandleSpellSpecificBoosts(bool apply)
                     else
                         return;
                     break;
+                }
                 case 63477:                                 // Slag Pot (25 man)
+                {
                     if (!apply && m_removeMode == AURA_REMOVE_BY_EXPIRE)
                     {
                         cast_at_remove = true;
                         spellId1 = 63536;                   // Slag Imbued
                     }
+                }
+                case 71905:                                 // Soul Fragment
+                {
+                    if (!apply)
+                    {
+                        spellId1 = 72521;                   // Shadowmourne Visual Low
+                        spellId2 = 72523;                   // Shadowmourne Visual High
+                    }
                     else
                         return;
                     break;
+                }
                 default:
                     return;
             }
