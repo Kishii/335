@@ -1356,23 +1356,10 @@ class MANGOS_DLL_SPEC Player : public Unit
         uint32 GetWeaponProficiency() const { return m_WeaponProficiency; }
         uint32 GetArmorProficiency() const { return m_ArmorProficiency; }
 
-        bool IsUseEquippedWeapon( WeaponAttackType attackType ) const
+        bool IsUseEquippedWeapon( bool mainhand ) const
         {
-            bool disarmed = false;
-            switch(attackType)
-            {
-                case BASE_ATTACK:
-                    disarmed = HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_DISARMED);
-                break;
-                case OFF_ATTACK:
-                    disarmed = HasFlag(UNIT_FIELD_FLAGS_2, UNIT_FLAG2_DISARM_OFFHAND);
-                break;
-                case RANGED_ATTACK:
-                    disarmed = HasFlag(UNIT_FIELD_FLAGS_2, UNIT_FLAG2_DISARM_RANGED);
-                break;
-            }
-
-            return !IsInFeralForm() && !disarmed;
+            // disarm applied only to mainhand weapon
+            return !IsInFeralForm() && (!mainhand || !HasFlag(UNIT_FIELD_FLAGS,UNIT_FLAG_DISARMED) );
         }
 
         bool IsTwoHandUsed() const

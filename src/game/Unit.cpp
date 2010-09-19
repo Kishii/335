@@ -353,7 +353,7 @@ bool Unit::haveOffhandWeapon() const
         return false;
 
     if(GetTypeId() == TYPEID_PLAYER)
-        return ((Player*)this)->GetWeaponForAttack(OFF_ATTACK,true,true) && ((Player*)this)->IsUseEquippedWeapon(OFF_ATTACK);
+        return ((Player*)this)->GetWeaponForAttack(OFF_ATTACK,true,true);
     else
         return false;
 }
